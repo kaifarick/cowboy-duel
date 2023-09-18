@@ -41,6 +41,7 @@ public class WinWindowSurvival : AWinWindow
         if(_resultsElements.Count >= 15 && _resultsElements.TrueForAll((element => element.isActiveAndEnabled)))
             _resultsElements.ForEach((element => element.gameObject.SetActive(false)));
         
+        
         ResultsElement currentElement;
         if (_resultsElements.Exists((element => !element.isActiveAndEnabled)))
             currentElement = _resultsElements.FirstOrDefault((element => !element.isActiveAndEnabled));

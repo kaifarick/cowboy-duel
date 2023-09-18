@@ -1,9 +1,7 @@
-
-
 using System;
 using Random = UnityEngine.Random;
 
-public abstract class APlayer: IPlayer
+public abstract class APlayer
 {
     public string Name { get; protected set; }
     public GameEnum.GameItem GameItem { get; protected set; }

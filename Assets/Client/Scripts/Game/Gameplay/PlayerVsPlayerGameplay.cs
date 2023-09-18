@@ -18,7 +18,7 @@ public class PlayerVsPlayerGameplay : AGameplay
 
         base.StartGame();
         
-        RoundNum++;
+        _roundNum++;
         
         StartMoveTimer(MOVE_TIME, () => _gameManager.SelectedItem());
     }
@@ -43,7 +43,7 @@ public class PlayerVsPlayerGameplay : AGameplay
         base.StopMoveTimer();
     }
 
-    protected override void EndGame()
+    public override void EndGame()
     {
         StopMoveTimer();
         base.EndGame();

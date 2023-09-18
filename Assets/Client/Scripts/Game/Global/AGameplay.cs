@@ -9,14 +9,15 @@ public abstract class AGameplay
     public APlayer SecondPlayer { get; protected set; }
     public APlayer PlayersTurn { get; protected set; }
     public APlayer PlayersWin { get; protected set; }
-    public int TimeLeft { get; protected set; }
-    public int RoundNum { get; protected set; }
     public object GameplayInfo { get; protected set; }
-    public GameEnum.RoundResult RoundResult { get; protected set;}
+    
+    protected GameEnum.RoundResult _roundResult;
+    protected int _timeLeft;
+    protected int _roundNum;
     
 
     public event Action<APlayer> OnChangeQueueAction;
-    public event Action<APlayer, GameEnum.RoundResult> OnEndRoundAction;
+    public event Action<APlayer, GameEnum.RoundResult, int> OnEndRoundAction;
     public event Action OnGameEndAction;
     
     public event Action OnStopMoveTimeAction;
@@ -26,10 +27,21 @@ public abstract class AGameplay
 
     public virtual void StartGame()
     {
-        Debug.Log($"RoundResult{RoundResult}");
+        Debug.Log($"RoundResult{_roundResult}");
         PlayersTurn = FirstPlayer;
         
         ChangeQueue(FirstPlayer);
+    }
+
+    protected virtual void EndRound()
+    {
+        OnEndRoundAction?.Invoke(PlayersWin, _roundResult, _roundNum);
+    }
+
+    public virtual void EndGame()
+    {
+        _roundNum = 0;
+        OnGameEndAction?.Invoke();
     }
     
     public virtual void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)
@@ -37,38 +49,26 @@ public abstract class AGameplay
         playersSelected?.SelectItem(gameItem);
     }
 
-    protected virtual void EndRound()
-    {
-        OnEndRoundAction?.Invoke(PlayersWin, RoundResult);
-    }
-
-    protected virtual void EndGame()
-    {
-        RoundNum = 0;
-        OnGameEndAction?.Invoke();
-    }
-
     protected void ChangeQueue(APlayer playerQueue)
     {
         PlayersTurn = playerQueue;
         OnChangeQueueAction?.Invoke(playerQueue);
     }
-
-    protected void StartMoveTimer(int time, Action callback)
-    {
-        TimeLeft = time;
-        TimerManager.WaitAndCall("RoundTimer", time, callback, () =>
-        {
-            TimeLeft--;
-            OnTimerTickAction?.Invoke(TimeLeft);
-        });
-        OnStartMoveTimerAction?.Invoke(time);
-    }
-
-
+    
     protected virtual void StopMoveTimer()
     {
         OnStopMoveTimeAction?.Invoke();
+    }
+
+    protected void StartMoveTimer(int time, Action callback)
+    {
+        _timeLeft = time;
+        TimerManager.WaitAndCall("RoundTimer", time, callback, () =>
+        {
+            _timeLeft--;
+            OnTimerTickAction?.Invoke(_timeLeft);
+        });
+        OnStartMoveTimerAction?.Invoke(time);
     }
 
     protected void CheckPlayerWin()
@@ -78,16 +78,16 @@ public abstract class AGameplay
             switch (SecondPlayer.GameItem)
             {
                 case GameEnum.GameItem.Rock:
-                    RoundResult = GameEnum.RoundResult.Draw;
+                    _roundResult = GameEnum.RoundResult.Draw;
                     break;
                 case GameEnum.GameItem.Paper:
-                    RoundResult = GameEnum.RoundResult.PlayerTwoWin;
+                    _roundResult = GameEnum.RoundResult.PlayerTwoWin;
                     PlayersWin = SecondPlayer;
                     FirstPlayer.SetWinState(false);
                     SecondPlayer.SetWinState(true);
                     break;
                 case GameEnum.GameItem.Scissors:
-                    RoundResult = GameEnum.RoundResult.PlayerOneWin;
+                    _roundResult = GameEnum.RoundResult.PlayerOneWin;
                     PlayersWin = FirstPlayer;
                     FirstPlayer.SetWinState(true);
                     SecondPlayer.SetWinState(false);
@@ -100,16 +100,16 @@ public abstract class AGameplay
             switch (SecondPlayer.GameItem)
             {
                 case GameEnum.GameItem.Rock:
-                    RoundResult = GameEnum.RoundResult.PlayerOneWin;
+                    _roundResult = GameEnum.RoundResult.PlayerOneWin;
                     PlayersWin = FirstPlayer;
                     FirstPlayer.SetWinState(true);
                     SecondPlayer.SetWinState(false);
                     break;
                 case GameEnum.GameItem.Paper:
-                    RoundResult = GameEnum.RoundResult.Draw;
+                    _roundResult = GameEnum.RoundResult.Draw;
                     break;
                 case GameEnum.GameItem.Scissors:
-                    RoundResult = GameEnum.RoundResult.PlayerTwoWin;
+                    _roundResult = GameEnum.RoundResult.PlayerTwoWin;
                     PlayersWin = SecondPlayer;
                     FirstPlayer.SetWinState(false);
                     SecondPlayer.SetWinState(true);
@@ -122,19 +122,19 @@ public abstract class AGameplay
             switch (SecondPlayer?.GameItem)
             {
                 case GameEnum.GameItem.Rock:
-                    RoundResult = GameEnum.RoundResult.PlayerTwoWin;
+                    _roundResult = GameEnum.RoundResult.PlayerTwoWin;
                     PlayersWin = SecondPlayer;
                     FirstPlayer.SetWinState(false);
                     SecondPlayer.SetWinState(true);
                     break;
                 case GameEnum.GameItem.Paper:
-                    RoundResult = GameEnum.RoundResult.PlayerOneWin;
+                    _roundResult = GameEnum.RoundResult.PlayerOneWin;
                     PlayersWin = FirstPlayer;
                     FirstPlayer.SetWinState(true);
                     SecondPlayer.SetWinState(false);
                     break;
                 case GameEnum.GameItem.Scissors:
-                    RoundResult = GameEnum.RoundResult.Draw;
+                    _roundResult = GameEnum.RoundResult.Draw;
                     break;
             }
         }

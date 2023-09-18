@@ -51,7 +51,7 @@ public class WinWindowChampionship : AWinWindow
             winElement = _bracketElements.FirstOrDefault((element => element.Stage == BracketElement.TournamentStage.Winner));
         }
         
-        if(gameResult!= GameEnum.RoundResult.Draw) winElement.Initialize(winPlayer.Name.ToString());
+        if(gameResult!= GameEnum.RoundResult.Draw) winElement.Initialize(winPlayer.Name);
     }
 
     private void OnGameEnd()

@@ -27,7 +27,6 @@ public class GameView : MonoBehaviour
     public event Action OnGameEndAction;
 
     private AWinWindow _winWindow;
-    private Coroutine _timeCoroutine;
     
     
     public void Initialize(AGameplay aGameplay)
@@ -97,11 +96,11 @@ public class GameView : MonoBehaviour
         _timer.text = time.ToString();
     }
 
-    private void OnRoundEnd(APlayer winPlayer, GameEnum.RoundResult roundResult)
+    private void OnRoundEnd(APlayer winPlayer, GameEnum.RoundResult roundResult, int roundNum)
     {
         _winWindow.Show();
         _winWindow.Initialize(winPlayer, _gameManager.AGameplay.FirstPlayer, _gameManager.AGameplay.SecondPlayer,
-            _gameManager.AGameplay.RoundNum, roundResult, _gameManager.AGameplay.GameplayInfo);
+            roundNum, roundResult, _gameManager.AGameplay.GameplayInfo);
     }
     
     private void OnGameEnd()

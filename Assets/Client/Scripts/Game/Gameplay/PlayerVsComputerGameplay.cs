@@ -17,7 +17,7 @@ public class PlayerVsComputerGameplay : AGameplay
         FirstPlayer = new Player("You", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new BotPlayer(GameEnum.PlayersNumber.PlayerTwo);
         
-        RoundNum++;
+        _roundNum++;
         
         base.StartGame();
     }

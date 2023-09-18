@@ -11,9 +11,4 @@ public class BotPlayer: APlayer
         Name = _names[Random.Range(0, _names.Length)];
         PlayersNumber = playersNumber;
     }
-
-    public override void SelectItem(GameEnum.GameItem gameItem)
-    {
-        base.SelectItem(gameItem);
-    }
 }

@@ -29,14 +29,14 @@ public class ChampionshipGameplay : AGameplay
     
     public override void StartGame()
     {
-        if(RoundResult != GameEnum.RoundResult.Draw) RoundNum++;
+        if(_roundResult != GameEnum.RoundResult.Draw) _roundNum++;
         
-        if (RoundNum == 1 || RoundNum == 2)
+        if (_roundNum == 1 || _roundNum == 2)
         { 
-            FirstPlayer = new Player(_championshipInfo.RoundInfos[RoundNum].PlayerOneName, GameEnum.PlayersNumber.PlayerOne);
-            SecondPlayer = new Player(_championshipInfo.RoundInfos[RoundNum].PlayerTwoName, GameEnum.PlayersNumber.PlayerTwo);
+            FirstPlayer = new Player(_championshipInfo.RoundInfos[_roundNum].PlayerOneName, GameEnum.PlayersNumber.PlayerOne);
+            SecondPlayer = new Player(_championshipInfo.RoundInfos[_roundNum].PlayerTwoName, GameEnum.PlayersNumber.PlayerTwo);
         }
-        else if (RoundNum == 3)
+        else if (_roundNum == 3)
         {
             FirstPlayer = new Player(_championshipInfo.RoundInfos[1].WinnerName, GameEnum.PlayersNumber.PlayerOne);
             SecondPlayer = new Player(_championshipInfo.RoundInfos[2].WinnerName, GameEnum.PlayersNumber.PlayerTwo);
@@ -63,7 +63,7 @@ public class ChampionshipGameplay : AGameplay
 
     protected override void EndRound()
     {
-        if(_championshipInfo.RoundInfos.Count >= RoundNum) _championshipInfo.RoundInfos[RoundNum].WinnerName = PlayersWin?.Name;
+        if(_championshipInfo.RoundInfos.Count >= _roundNum) _championshipInfo.RoundInfos[_roundNum].WinnerName = PlayersWin?.Name;
         base.EndRound();
     }
 
@@ -73,7 +73,7 @@ public class ChampionshipGameplay : AGameplay
         base.StopMoveTimer();
     }
 
-    protected override void EndGame()
+    public override void EndGame()
     {
         StopMoveTimer();
         base.EndGame();

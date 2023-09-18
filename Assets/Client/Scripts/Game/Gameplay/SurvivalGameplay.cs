@@ -13,7 +13,7 @@ public class SurvivalGameplay : AGameplay
         FirstPlayer = new Player("You", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new BotPlayer(GameEnum.PlayersNumber.PlayerTwo);
         
-        if(RoundResult != GameEnum.RoundResult.Draw) RoundNum++;
+        if(_roundResult != GameEnum.RoundResult.Draw) _roundNum++;
         
         base.StartGame();
     }

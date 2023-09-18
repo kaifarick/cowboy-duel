@@ -8,8 +8,6 @@ public class SelectionItemButton : MonoBehaviour
 {
     [SerializeField] private Button _button;
     [SerializeField] private GameEnum.GameItem _gameItem;
-    
-    public GameEnum.GameItem GameItem => _gameItem;
 
     private Color32 _defaultDeactivateColor = new Color32(200, 200, 200, 128);
     private Color32 _selectedDeactivateColor = new Color32(155, 253, 153, 255);
