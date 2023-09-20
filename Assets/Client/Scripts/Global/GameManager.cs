@@ -3,16 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameView _gameView;
-    [SerializeField] private MenuView _menuView;
     public AGameplay AGameplay { get; private set; }
     
     public event Action OnGameEndAction;
     public event Action OnGameStartAction;
-    public event Action <APlayer, GameEnum.RoundResult, int> OnEndRoundAction;
     
     public event Action<APlayer> OnChangeQueueAction;
     public event Action<APlayer,GameEnum.GameItem> OnSelectionItemAction;
@@ -22,25 +20,26 @@ public class GameManager : MonoBehaviour
     public event Action<int> OnTimerTickAction;
     public event Action  OnEndMoveTimerAction;
 
-    
+    [Inject] private WindowsManager _windowsManager;
 
     public void StartGame(AGameplay gameplay)
     {
         AGameplay = gameplay;
         
-        AGameplay.OnChangeQueueAction += OnChangeQueue;
-        AGameplay.OnEndRoundAction += OnEndRound;
-        AGameplay.OnStartMoveTimerAction += OnStartMoveTimer;
-        AGameplay.OnStopMoveTimeAction += OnStopMoveTimer;
-        AGameplay.OnTimerTickAction += OnTimerTick;
-        
-        
-        AGameplay.StartGame();
+        gameplay.OnChangeQueueAction += OnChangeQueue;
+        gameplay.OnEndRoundAction += OnEndRound;
+        gameplay.OnStartMoveTimerAction += OnStartMoveTimer;
+        gameplay.OnStopMoveTimeAction += OnStopMoveTimer;
+        gameplay.OnTimerTickAction += OnTimerTick;
         
         OnGameStartAction?.Invoke();
         
-        _gameView.Initialize(gameplay);
-        
+        StartRound();
+    }
+
+    public void StartRound()
+    {
+        AGameplay.StartRound();
     }
     
     public void SelectedItem(GameEnum.GameItem gameItem = GameEnum.GameItem.None)
@@ -55,6 +54,12 @@ public class GameManager : MonoBehaviour
     {
         AGameplay.EndGame();
         OnGameEndAction?.Invoke();
+        
+        AGameplay.OnChangeQueueAction -= OnChangeQueue;
+        AGameplay.OnEndRoundAction -= OnEndRound;
+        AGameplay.OnStartMoveTimerAction -= OnStartMoveTimer;
+        AGameplay.OnStopMoveTimeAction -= OnStopMoveTimer;
+        AGameplay.OnTimerTickAction -= OnTimerTick;
     }
 
     private void OnStartMoveTimer(int time)
@@ -77,15 +82,11 @@ public class GameManager : MonoBehaviour
         OnTimerTickAction?.Invoke(timeLeft);
     }
     
-
-    private void OnEndRound(APlayer aPlayer, GameEnum.RoundResult roundResult, int roundNum)
+    private void OnEndRound(APlayer winPlayer, GameEnum.RoundResult roundResult, int roundNum)
     {
-        OnEndRoundAction?.Invoke(aPlayer, roundResult, roundNum);
-        
-        AGameplay.OnChangeQueueAction -= OnChangeQueue;
-        AGameplay.OnEndRoundAction -= OnEndRound;
-        AGameplay.OnStartMoveTimerAction -= OnStartMoveTimer;
-        AGameplay.OnStopMoveTimeAction -= OnStopMoveTimer;
-        AGameplay.OnTimerTickAction -= OnTimerTick;
+        AWinWindow winWindow = _windowsManager.GetWinWindow(AGameplay);
+        winWindow.Show();
+        winWindow.Initialize(winPlayer, AGameplay.FirstPlayer, AGameplay.SecondPlayer,
+            roundNum, roundResult,AGameplay.GameplayInfo);
     }
 }

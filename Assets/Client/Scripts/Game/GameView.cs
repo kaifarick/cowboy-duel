@@ -21,18 +21,9 @@ public class GameView : MonoBehaviour
     
 
     [Inject] private GameManager _gameManager;
-    [Inject] private WindowsManager _windowsManager;
 
     public event Action<GameEnum.GameItem> OnSelectionItemButtonClickAction;
     public event Action OnGameEndAction;
-
-    private AWinWindow _winWindow;
-    
-    
-    public void Initialize(AGameplay aGameplay)
-    {
-        _winWindow = _windowsManager.GetWinWindow(aGameplay);
-    }
     
 
     private void Awake()
@@ -43,7 +34,6 @@ public class GameView : MonoBehaviour
     private void Start()
     {
         _gameManager.OnGameEndAction += OnGameEnd;
-        _gameManager.OnEndRoundAction += OnRoundEnd;
         _gameManager.OnGameStartAction += OnStartGame;
         
         _gameManager.OnChangeQueueAction += OnChangeQueue;
@@ -94,13 +84,6 @@ public class GameView : MonoBehaviour
     private void OnTimerTick(int time)
     {
         _timer.text = time.ToString();
-    }
-
-    private void OnRoundEnd(APlayer winPlayer, GameEnum.RoundResult roundResult, int roundNum)
-    {
-        _winWindow.Show();
-        _winWindow.Initialize(winPlayer, _gameManager.AGameplay.FirstPlayer, _gameManager.AGameplay.SecondPlayer,
-            roundNum, roundResult, _gameManager.AGameplay.GameplayInfo);
     }
     
     private void OnGameEnd()

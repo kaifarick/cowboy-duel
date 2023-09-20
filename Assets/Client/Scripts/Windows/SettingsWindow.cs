@@ -18,14 +18,4 @@ public class SettingsWindow : BaseWindow
 
         _toggle.isOn = _soundManager.MenuSoundState;
     }
-
-    public void Show()
-    {
-        gameObject.SetActive(true);
-    }
-
-    private void Hide()
-    {
-        gameObject.SetActive(false);
-    }
 }

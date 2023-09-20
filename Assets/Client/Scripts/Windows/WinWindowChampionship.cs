@@ -24,7 +24,7 @@ public class WinWindowChampionship : AWinWindow
         
         _resumeButton.onClick.AddListener(() =>
         {
-            if(roundNum <= _championshipInfo.RoundInfos.Count || gameResult == GameEnum.RoundResult.Draw) _gameManager.StartGame(_gameManager.AGameplay);
+            if (roundNum <= _championshipInfo.RoundInfos.Count || gameResult == GameEnum.RoundResult.Draw) _gameManager.StartRound();
             else _gameManager.GameEnd();;
         });
         

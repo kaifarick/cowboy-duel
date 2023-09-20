@@ -27,7 +27,7 @@ public class ChampionshipGameplay : AGameplay
     
     
     
-    public override void StartGame()
+    public override void StartRound()
     {
         if(_roundResult != GameEnum.RoundResult.Draw) _roundNum++;
         
@@ -42,7 +42,7 @@ public class ChampionshipGameplay : AGameplay
             SecondPlayer = new Player(_championshipInfo.RoundInfos[2].WinnerName, GameEnum.PlayersNumber.PlayerTwo);
         }
 
-        base.StartGame();
+        base.StartRound();
         
         StartMoveTimer(MOVE_TIME, () => _gameManager.SelectedItem());
     }

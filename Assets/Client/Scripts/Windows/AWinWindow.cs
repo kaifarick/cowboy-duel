@@ -29,15 +29,11 @@ public abstract class AWinWindow : BaseWindow
         _resumeButton.onClick.AddListener(Hide);
         
     }
-
-    public void Show()
-    {
-        gameObject.SetActive(true);
-    }
     
-    public void Hide()
+    
+    public override void Hide()
     {
         _resumeButton.onClick.RemoveAllListeners();
-        gameObject.SetActive(false);
+        base.Hide();
     }
 }

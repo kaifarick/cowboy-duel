@@ -11,12 +11,12 @@ public class PlayerVsPlayerGameplay : AGameplay
         _gameManager = gameManager;
     }
 
-    public override void StartGame()
+    public override void StartRound()
     {
         FirstPlayer = new Player("Player One", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new Player("Player Two", GameEnum.PlayersNumber.PlayerTwo);
 
-        base.StartGame();
+        base.StartRound();
         
         _roundNum++;
         

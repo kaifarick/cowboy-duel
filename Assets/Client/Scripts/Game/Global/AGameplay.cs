@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public abstract class AGameplay
 {
@@ -18,35 +19,33 @@ public abstract class AGameplay
 
     public event Action<APlayer> OnChangeQueueAction;
     public event Action<APlayer, GameEnum.RoundResult, int> OnEndRoundAction;
-    public event Action OnGameEndAction;
     
     public event Action OnStopMoveTimeAction;
     public event Action<int> OnStartMoveTimerAction;
     public event Action<int> OnTimerTickAction;
+    
 
-
-    public virtual void StartGame()
+    public virtual void StartRound()
     {
         Debug.Log($"RoundResult{_roundResult}");
         PlayersTurn = FirstPlayer;
         
         ChangeQueue(FirstPlayer);
     }
-
-    protected virtual void EndRound()
-    {
-        OnEndRoundAction?.Invoke(PlayersWin, _roundResult, _roundNum);
-    }
-
+    
     public virtual void EndGame()
     {
         _roundNum = 0;
-        OnGameEndAction?.Invoke();
     }
     
     public virtual void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)
     {
         playersSelected?.SelectItem(gameItem);
+    }
+
+    protected virtual void EndRound()
+    {
+        OnEndRoundAction?.Invoke(PlayersWin, _roundResult, _roundNum);
     }
 
     protected void ChangeQueue(APlayer playerQueue)

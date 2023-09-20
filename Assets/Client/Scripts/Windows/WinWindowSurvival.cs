@@ -26,7 +26,7 @@ public class WinWindowSurvival : AWinWindow
         
         _resumeButton.onClick.AddListener(() =>
         {
-            if(winPlayer is Player || gameResult == GameEnum.RoundResult.Draw) _gameManager.StartGame(_gameManager.AGameplay);
+            if(winPlayer is Player || gameResult == GameEnum.RoundResult.Draw) _gameManager.StartRound();
             else  _gameManager.GameEnd();;
         });
 

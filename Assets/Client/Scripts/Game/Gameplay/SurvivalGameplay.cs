@@ -8,14 +8,14 @@ public class SurvivalGameplay : AGameplay
         _gameManager = gameManager;
     }
     
-    public override void StartGame()
+    public override void StartRound()
     {
         FirstPlayer = new Player("You", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new BotPlayer(GameEnum.PlayersNumber.PlayerTwo);
         
         if(_roundResult != GameEnum.RoundResult.Draw) _roundNum++;
         
-        base.StartGame();
+        base.StartRound();
     }
     
     public override void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)

@@ -12,14 +12,14 @@ public class PlayerVsComputerGameplay : AGameplay
         _gameManager = gameManager;
     }
    
-    public override void StartGame()
+    public override void StartRound()
     {
         FirstPlayer = new Player("You", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new BotPlayer(GameEnum.PlayersNumber.PlayerTwo);
         
         _roundNum++;
         
-        base.StartGame();
+        base.StartRound();
     }
 
     public override void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)
