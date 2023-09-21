@@ -27,8 +27,8 @@ public class WinWindowChampionship : AWinWindow
             if (roundNum <= _championshipInfo.RoundInfos.Count || gameResult == GameEnum.RoundResult.Draw) _gameManager.StartRound();
             else _gameManager.GameEnd();;
         });
-        
-        BracketElement winElement = new BracketElement();
+
+        BracketElement winElement = null;
         if (roundNum == 1)
         {
             List<BracketElement> semifinalLeft = _bracketElements.FindAll((element =>  element.Stage == BracketElement.TournamentStage.Semifinal && element.Side == BracketElement.TournamentSide.Left));

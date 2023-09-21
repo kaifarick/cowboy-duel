@@ -33,9 +33,12 @@ public static class TimerManager
 
     public static void RemoveWaiter(string key)
     {
-        CoroutineManager.StopCoroutineStatic(_waitCoroutines[key]);
         if (_waitCalls.ContainsKey(key)) _waitCalls.Remove(key);
-        if (_waitCoroutines.ContainsKey(key)) _waitCoroutines.Remove(key);
+        if (_waitCoroutines.ContainsKey(key))
+        {
+            CoroutineManager.StopCoroutineStatic(_waitCoroutines[key]);
+            _waitCoroutines.Remove(key);
+        }
     }
 
     private static IEnumerator StartTimer(string key)
