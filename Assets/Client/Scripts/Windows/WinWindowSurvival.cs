@@ -15,7 +15,7 @@ public class WinWindowSurvival : AWinWindow
 
     private List<ResultsElement> _resultsElements = new List<ResultsElement>();
 
-    private void Awake()
+    private void Start()
     {
         _gameManager.OnGameEndAction += OnGameEnd;
     }

@@ -84,8 +84,12 @@ public class GameManager : MonoBehaviour
     
     private void OnEndRound(APlayer winPlayer, GameEnum.RoundResult roundResult, int roundNum)
     {
-        AWinWindow winWindow = _windowsManager.GetWinWindow(AGameplay);
-        winWindow.Show();
+        AWinWindow winWindow = null;
+        if (AGameplay is PlayerVsComputerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsComputer>();
+        if (AGameplay is PlayerVsPlayerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsPlayer>();
+        if (AGameplay is SurvivalGameplay) winWindow = _windowsManager.OpenWindow<WinWindowSurvival>();
+        if (AGameplay is ChampionshipGameplay) winWindow = _windowsManager.OpenWindow<WinWindowChampionship>();
+        
         winWindow.Initialize(winPlayer, AGameplay.FirstPlayer, AGameplay.SecondPlayer,
             roundNum, roundResult,AGameplay.GameplayInfo);
     }

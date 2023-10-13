@@ -25,8 +25,8 @@ public class MenuView : MonoBehaviour
         _playerVsPlayerBtn.onClick.AddListener(() => _gameManager.StartGame(new PlayerVsPlayerGameplay(_gameManager)));
         _survivalModeBtn.onClick.AddListener(() => _gameManager.StartGame(new SurvivalGameplay(_gameManager)));
         _championshipBtn.onClick.AddListener(() => _gameManager.StartGame(new ChampionshipGameplay(_gameManager)));
-        
-        _settingsButton.onClick.AddListener((() => _windowsManager.GetSettingsWindow().Show()));
+
+        _settingsButton.onClick.AddListener((() => _windowsManager.OpenWindow<SettingsWindow>()));
     }
 
     private void Start()

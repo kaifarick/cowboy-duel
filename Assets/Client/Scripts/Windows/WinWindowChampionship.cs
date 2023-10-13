@@ -11,7 +11,7 @@ public class WinWindowChampionship : AWinWindow
     
     private ChampionshipInfo _championshipInfo;
     
-    private void Awake()
+    private void Start()
     {
         _gameManager.OnGameEndAction += OnGameEnd;
     }

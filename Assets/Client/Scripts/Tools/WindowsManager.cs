@@ -1,24 +1,40 @@
-
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Zenject;
 
 public class WindowsManager : MonoBehaviour
 {
-    [SerializeField] private SettingsWindow _settingsWindow;
-    [SerializeField] private WinWindowPlayerVsComputer winWindowPlayerVsComputer;
-    [SerializeField] private WinWindowPlayerVsPlayer _winWindowPlayerVsPlayer;
-    [SerializeField] private WinWindowSurvival _winWindowSurvival;
-    [SerializeField] private WinWindowChampionship _winWindowChampionship;
 
-    public SettingsWindow GetSettingsWindow() => _settingsWindow;
-    
-    public AWinWindow GetWinWindow(AGameplay aGameplay)
+    private readonly Dictionary<string, BaseWindow> _windows = new Dictionary<string, BaseWindow>();
+
+    [Inject] private readonly DiContainer _diContainer;
+
+    private T GetWindow<T>() where T : BaseWindow
     {
-        if (aGameplay is PlayerVsComputerGameplay) return winWindowPlayerVsComputer;
-        if (aGameplay is PlayerVsPlayerGameplay) return _winWindowPlayerVsPlayer;
-        if (aGameplay is SurvivalGameplay) return _winWindowSurvival;
-        if (aGameplay is ChampionshipGameplay) return _winWindowChampionship;
+        string windowName = typeof(T).Name.ToString();
+        T window;
+        if (_windows.ContainsKey(windowName))
+        {
+            window = _windows[windowName] as T;
+            if (window != null)
+            {
+                return window;
+            }
+        }
 
-        return null;
+        var windowPrefab = Resources.Load<T>("Windows/" + windowName);
+        window = Instantiate(windowPrefab, gameObject.transform);
+        _windows.Add(windowName, window);
+        
+        _diContainer.Inject(window);
+
+        return window;
+    }
+    
+    public T OpenWindow<T>() where T : BaseWindow
+    {
+        T window = GetWindow<T>();
+        window.Show();
+        return window;
     }
 }
