@@ -10,8 +10,9 @@ public class GameManager : MonoBehaviour
     public AGameplay AGameplay { get; private set; }
     
     public event Action OnGameEndAction;
-    public event Action OnGameStartAction;
+    public event Action<AGameplay> OnGameStartAction;
     
+
     public event Action<APlayer> OnChangeQueueAction;
     public event Action<APlayer,GameEnum.GameItem> OnSelectionItemAction;
 
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     public event Action<int> OnStartMoveTimerAction;
     public event Action<int> OnTimerTickAction;
     public event Action  OnEndMoveTimerAction;
+    
 
     [Inject] private WindowsManager _windowsManager;
 
@@ -32,7 +34,7 @@ public class GameManager : MonoBehaviour
         gameplay.OnStopMoveTimeAction += OnStopMoveTimer;
         gameplay.OnTimerTickAction += OnTimerTick;
         
-        OnGameStartAction?.Invoke();
+        OnGameStartAction?.Invoke(gameplay);
         
         StartRound();
     }

@@ -9,7 +9,7 @@ public class ChampionshipGameplay : AGameplay
     private ChampionshipInfo _championshipInfo;
 
     private const int MOVE_TIME = 5;
-    public ChampionshipGameplay(GameManager gameManager)
+    public ChampionshipGameplay(GameManager gameManager): base(GameEnum.GameplayType.TwoPlayers)
     {
         _gameManager = gameManager;
 

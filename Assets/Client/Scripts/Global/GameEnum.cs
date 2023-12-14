@@ -26,5 +26,11 @@ public class GameEnum : MonoBehaviour
         PlayerOne,
         PlayerTwo
     }
+
+    public enum GameplayType
+    {
+        OnePlayer,
+        TwoPlayers
+    }
     
 }

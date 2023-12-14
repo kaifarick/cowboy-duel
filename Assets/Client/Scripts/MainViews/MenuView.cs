@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -35,7 +32,7 @@ public class MenuView : MonoBehaviour
         _gameManager.OnGameEndAction += OnEndGame;
     }
 
-    private void OnStartGame()
+    private void OnStartGame(AGameplay gameplay)
     {
         _canvas.enabled = false;
     }

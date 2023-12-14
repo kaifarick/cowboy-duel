@@ -41,4 +41,5 @@ public class SplashInitializer : MonoBehaviour
         
         SceneManager.UnloadSceneAsync((int)Scene.Initialize);
     }
+    
 }

@@ -14,18 +14,34 @@ public class SelectionItemButton : MonoBehaviour
 
     [Inject] private GameManager _gameManager;
 
+    private Transform _centre;
+    private float _moveSpeed;
+    private Vector3 _direction;
+    private Quaternion _rotation;
+
 
     private void Awake()
     {
         _button.onClick.AddListener((() => _gameManager.SelectedItem(_gameItem)));
     }
 
-    public void Initialize(GameView gameView)
+    public void Initialize(GameView gameView, Transform centre, float moveSpeed)
     {
+        _centre = centre;
+        _moveSpeed = moveSpeed;
+
         gameView.OnSelectionItemButtonClickAction += OnSelectionItemButtonClickAction;
         gameView.OnGameEndAction += ResetData;
     }
-    
+
+    private void Update()
+    {
+        _direction = transform.position - _centre.position;
+        _rotation = Quaternion.AngleAxis(_moveSpeed, Vector3.forward);
+        transform.position = _centre.transform.position + _rotation * _direction ;
+
+    }
+
     private void OnSelectionItemButtonClickAction(GameEnum.GameItem gameItem)
     {
         if (_gameManager.AGameplay is PlayerVsComputerGameplay)

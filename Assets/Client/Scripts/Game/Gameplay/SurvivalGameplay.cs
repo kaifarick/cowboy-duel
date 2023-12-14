@@ -3,7 +3,7 @@
 public class SurvivalGameplay : AGameplay
 {
     private GameManager _gameManager;
-    public SurvivalGameplay(GameManager gameManager)
+    public SurvivalGameplay(GameManager gameManager):base(GameEnum.GameplayType.OnePlayer)
     {
         _gameManager = gameManager;
     }

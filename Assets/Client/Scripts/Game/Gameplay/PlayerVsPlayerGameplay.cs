@@ -6,7 +6,7 @@ public class PlayerVsPlayerGameplay : AGameplay
 
     private const int MOVE_TIME = 5;
     
-    public PlayerVsPlayerGameplay(GameManager gameManager)
+    public PlayerVsPlayerGameplay(GameManager gameManager):base(GameEnum.GameplayType.TwoPlayers)
     {
         _gameManager = gameManager;
     }

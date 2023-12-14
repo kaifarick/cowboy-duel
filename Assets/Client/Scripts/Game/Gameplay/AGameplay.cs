@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -10,8 +8,9 @@ public abstract class AGameplay
     public APlayer SecondPlayer { get; protected set; }
     public APlayer PlayersTurn { get; protected set; }
     public APlayer PlayersWin { get; protected set; }
+    public GameEnum.GameplayType GameplayType { get; protected set; }
     public object GameplayInfo { get; protected set; }
-    
+
     protected GameEnum.RoundResult _roundResult;
     protected int _timeLeft;
     protected int _roundNum;
@@ -23,8 +22,14 @@ public abstract class AGameplay
     public event Action OnStopMoveTimeAction;
     public event Action<int> OnStartMoveTimerAction;
     public event Action<int> OnTimerTickAction;
-    
 
+
+    protected AGameplay(GameEnum.GameplayType gameplayType)
+    {
+        GameplayType = gameplayType;
+    }
+    
+    
     public virtual void StartRound()
     {
         Debug.Log($"RoundResult{_roundResult}");

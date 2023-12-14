@@ -6,6 +6,7 @@ using UnityEngine;
 public class CowboyView : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
+    [SerializeField] private RevolverView _revolverView;
 
     private void Shot()
     {
@@ -13,6 +14,17 @@ public class CowboyView : MonoBehaviour
         _animator.SetTrigger("Shot");
     }
 
+    private void TakeGun()
+    {
+        _revolverView.Show();
+    }
+
+    private void PutGun()
+    {
+        _revolverView.Hide();
+    }
+    
+    
     private void OnMouseDown()
     {
         Shot();

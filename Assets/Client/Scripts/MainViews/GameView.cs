@@ -16,7 +16,7 @@ public class GameView : MonoBehaviour
     
     [Space]
     [SerializeField] private Button _homeButton;
-    [SerializeField] private List<SelectionItemButton> _selectionItemButton;
+    [SerializeField] private List<SelectionButtonsGroup> _selectionButtonsGroup;
     [SerializeField] private Canvas _canvas;
     
 
@@ -24,6 +24,7 @@ public class GameView : MonoBehaviour
 
     public event Action<GameEnum.GameItem> OnSelectionItemButtonClickAction;
     public event Action OnGameEndAction;
+    public event Action<AGameplay> OnGameStartAction; 
     
 
     private void Awake()
@@ -45,18 +46,19 @@ public class GameView : MonoBehaviour
 
     }
 
-    private void OnStartGame()
+    private void OnStartGame(AGameplay gameplay)
     {
         _canvas.enabled = true;
+        OnGameStartAction?.Invoke(gameplay);
     }
 
     private void SetButtons()
     {
         _homeButton.onClick.AddListener(() => _gameManager.GameEnd());
         
-        foreach (var button in _selectionItemButton)
+        foreach (var buttonsGroup in _selectionButtonsGroup)
         {
-            button.Initialize(this);
+            buttonsGroup.Initialize(this);
         }
     }
 

@@ -7,7 +7,7 @@ public class PlayerVsComputerGameplay : AGameplay
     
    private GameManager _gameManager;
     
-    public PlayerVsComputerGameplay(GameManager gameManager)
+    public PlayerVsComputerGameplay(GameManager gameManager) : base(GameEnum.GameplayType.OnePlayer)
     {
         _gameManager = gameManager;
     }
