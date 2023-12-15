@@ -38,6 +38,7 @@ Requirements:
 	Represent progression as a path with player competitors.
 	Display the current round and the player's progress.
 	Championship Mode: 
+ 
 	Create a playoff-style game mechanic where players compete against each other.
 	Implement a tournament bracket or similar structure.
 	Track the progress of players through the championship rounds.
