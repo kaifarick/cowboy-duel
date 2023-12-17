@@ -1,36 +1,26 @@
 
 
-using Zenject;
-
 public class PlayerVsComputerGameplay : AGameplay
 {
     
-   private GameManager _gameManager;
     
     public PlayerVsComputerGameplay(GameManager gameManager) : base(GameEnum.GameplayType.OnePlayer)
     {
-        _gameManager = gameManager;
+        
     }
    
     public override void StartRound()
     {
+        base.StartRound();
+        
         FirstPlayer = new Player("You", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new BotPlayer(GameEnum.PlayersNumber.PlayerTwo);
-        
-        _roundNum++;
-        
-        base.StartRound();
+
+        GameData.RoundInfos[_roundNum].FirstPlayerName = FirstPlayer.Name;
+        GameData.RoundInfos[_roundNum].SecondPlayerName = SecondPlayer.Name;
+
+        GameData.RoundInfos[_roundNum].SecondPlayerItem = SecondPlayer.GameItem;
+
     }
 
-    public override void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)
-    {
-        base.OnSelectedItem(playersSelected, gameItem);
-        
-        ChangeQueue(SecondPlayer);
-        
-        //bot move
-        if(PlayersTurn != playersSelected) _gameManager.SelectedItem();
-        else CheckPlayerWin();
-    }
-    
 }

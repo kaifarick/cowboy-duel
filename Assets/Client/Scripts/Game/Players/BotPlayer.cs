@@ -1,5 +1,3 @@
-using System;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class BotPlayer: APlayer
@@ -10,5 +8,7 @@ public class BotPlayer: APlayer
     {
         Name = _names[Random.Range(0, _names.Length)];
         PlayersNumber = playersNumber;
+        
+        SelectItem(GameEnum.GameItem.None);
     }
 }

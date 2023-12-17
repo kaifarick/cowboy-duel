@@ -95,6 +95,8 @@ MonoBehaviour:
   - {fileID: 2397938901320780778}
   _moveSpeed: 0.15
   _centre: {fileID: 8354472965500046444}
+  _groupType: 0
+  _playersNumber: 0
 --- !u!1001 &3162532291919047015
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102,6 +104,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3162532292035472325}
     m_Modifications:
+    - target: {fileID: 766916940484194338, guid: e12ae8ba008544c428373e60d83132fe, type: 3}
+      propertyPath: _gameItem
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2945081964706680032, guid: e12ae8ba008544c428373e60d83132fe, type: 3}
       propertyPath: m_Name
       value: RockButton
@@ -229,7 +235,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 766916940484194338, guid: e12ae8ba008544c428373e60d83132fe, type: 3}
       propertyPath: _gameItem
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2945081964706680032, guid: e12ae8ba008544c428373e60d83132fe, type: 3}
       propertyPath: m_Name
@@ -358,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 766916940484194338, guid: e12ae8ba008544c428373e60d83132fe, type: 3}
       propertyPath: _gameItem
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2945081964706680032, guid: e12ae8ba008544c428373e60d83132fe, type: 3}
       propertyPath: m_Name

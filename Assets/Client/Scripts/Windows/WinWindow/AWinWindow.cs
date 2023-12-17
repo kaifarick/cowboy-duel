@@ -18,13 +18,13 @@ public abstract class AWinWindow : BaseWindow
     [Inject] protected GameManager _gameManager;
     
 
-    public virtual void Initialize(APlayer winPlayer, APlayer firstPlayer, APlayer secondPlayer, int roundNum, GameEnum.RoundResult gameResult, object gameplayInfo)
+    public virtual void Initialize(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
     {
-        string winTxt = gameResult == GameEnum.RoundResult.Draw ? gameResult.ToString() : $"{winPlayer.Name} win!";
+        string winTxt = roundResult == GameEnum.RoundResult.Draw ? roundResult.ToString() : $"{gameData.RoundInfos[roundNum].WinnerName} win!";
         _winPlayerTxt.text = winTxt;
         
-        _playerOneItemTxt.text = $"{firstPlayer.Name} {firstPlayer.GameItem}";
-        _playerTwoItemTxt.text = $"{secondPlayer.Name} {secondPlayer.GameItem}";
+        _playerOneItemTxt.text = $"{gameData.RoundInfos[roundNum].FirstPlayerName} {gameData.RoundInfos[roundNum].FirstPlayerItem}";
+        _playerTwoItemTxt.text = $"{gameData.RoundInfos[roundNum].SecondPlayerName} {gameData.RoundInfos[roundNum].SecondPlayerItem}";
         
         _resumeButton.onClick.AddListener(Hide);
         

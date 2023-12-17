@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 public abstract class APlayer
 {
     public string Name { get; protected set; }
-    public GameEnum.GameItem GameItem { get; protected set; }
+    public GameEnum.GameItem GameItem { get; protected set; } = GameEnum.GameItem.None;
     public GameEnum.PlayersNumber PlayersNumber { get; protected set; }
     
     public bool IsWin { get; protected set; }
@@ -17,7 +17,8 @@ public abstract class APlayer
         {
             Type type = typeof(GameEnum.GameItem);
             Array values = type.GetEnumValues();
-            int index = Random.Range(0,values.Length - 1);
+            //1 - None enum
+            int index = Random.Range(1,values.Length);
             GameItem = (GameEnum.GameItem)values.GetValue(index);
             
             //debug

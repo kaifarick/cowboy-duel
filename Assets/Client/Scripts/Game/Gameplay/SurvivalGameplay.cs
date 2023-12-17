@@ -2,30 +2,21 @@
 
 public class SurvivalGameplay : AGameplay
 {
-    private GameManager _gameManager;
     public SurvivalGameplay(GameManager gameManager):base(GameEnum.GameplayType.OnePlayer)
     {
-        _gameManager = gameManager;
+        GameData.RoundInfos.Add(1, new GameData.RoundInfo { FirstPlayerName = "Player One", SecondPlayerName = "Player Two" });
     }
     
     public override void StartRound()
     {
+        base.StartRound();
+        
         FirstPlayer = new Player("You", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new BotPlayer(GameEnum.PlayersNumber.PlayerTwo);
+
+        GameData.RoundInfos[_roundNum].FirstPlayerName = FirstPlayer.Name;
+        GameData.RoundInfos[_roundNum].SecondPlayerName = SecondPlayer.Name;
         
-        if(_roundResult != GameEnum.RoundResult.Draw) _roundNum++;
-        
-        base.StartRound();
-    }
-    
-    public override void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)
-    {
-        base.OnSelectedItem(playersSelected, gameItem);
-        
-        ChangeQueue(SecondPlayer);
-        
-        //bot move
-        if(PlayersTurn != playersSelected) _gameManager.SelectedItem();
-        else CheckPlayerWin();
+        GameData.RoundInfos[_roundNum].SecondPlayerItem = SecondPlayer.GameItem;
     }
 }

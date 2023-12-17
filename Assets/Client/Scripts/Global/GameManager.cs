@@ -1,98 +1,63 @@
 #nullable enable
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 public class GameManager : MonoBehaviour
 {
-    public AGameplay AGameplay { get; private set; }
+    private AGameplay _gameplay;
+    private GamePresenter _gamePresenter;
     
     public event Action OnGameEndAction;
-    public event Action<AGameplay> OnGameStartAction;
-    
-
-    public event Action<APlayer> OnChangeQueueAction;
-    public event Action<APlayer,GameEnum.GameItem> OnSelectionItemAction;
-
-    
-    public event Action<int> OnStartMoveTimerAction;
-    public event Action<int> OnTimerTickAction;
-    public event Action  OnEndMoveTimerAction;
-    
+    public event Action<GamePresenter> OnGameStartAction;
+    public event Action<GameEnum.GameplayType> OnRoundStartAction;
 
     [Inject] private WindowsManager _windowsManager;
-
+    
+    
+   
     public void StartGame(AGameplay gameplay)
     {
-        AGameplay = gameplay;
-        
-        gameplay.OnChangeQueueAction += OnChangeQueue;
+        _gameplay = gameplay;
+        _gamePresenter = new GamePresenter(gameplay, this);
+
         gameplay.OnEndRoundAction += OnEndRound;
-        gameplay.OnStartMoveTimerAction += OnStartMoveTimer;
-        gameplay.OnStopMoveTimeAction += OnStopMoveTimer;
-        gameplay.OnTimerTickAction += OnTimerTick;
-        
-        OnGameStartAction?.Invoke(gameplay);
+        gameplay.OnRoundStartAction += OnRoundStart;
+
+        OnGameStartAction?.Invoke(_gamePresenter);
         
         StartRound();
     }
 
     public void StartRound()
     {
-        AGameplay.StartRound();
+        _gameplay.StartRound();
     }
     
-    public void SelectedItem(GameEnum.GameItem gameItem = GameEnum.GameItem.None)
-    {
-        var playerTurn = AGameplay.PlayersTurn;
-        
-        AGameplay.OnSelectedItem(playerTurn, gameItem);
-        OnSelectionItemAction?.Invoke(playerTurn,gameItem);
-    }
     
     public void GameEnd()
     {
-        AGameplay.EndGame();
+        _gameplay.EndGame();
         OnGameEndAction?.Invoke();
         
-        AGameplay.OnChangeQueueAction -= OnChangeQueue;
-        AGameplay.OnEndRoundAction -= OnEndRound;
-        AGameplay.OnStartMoveTimerAction -= OnStartMoveTimer;
-        AGameplay.OnStopMoveTimeAction -= OnStopMoveTimer;
-        AGameplay.OnTimerTickAction -= OnTimerTick;
+        _gameplay.OnEndRoundAction -= OnEndRound;
+        _gameplay.OnRoundStartAction -= OnRoundStart;
     }
 
-    private void OnStartMoveTimer(int time)
-    {
-        OnStartMoveTimerAction?.Invoke(time);
-    }
 
-    private void OnStopMoveTimer()
+    private void OnRoundStart(GameEnum.GameplayType gameplayType)
     {
-        OnEndMoveTimerAction?.Invoke();
-    }
-
-    private void OnChangeQueue(APlayer player)
-    {
-        OnChangeQueueAction?.Invoke(player);
-    }
-
-    private void OnTimerTick(int timeLeft)
-    {
-        OnTimerTickAction?.Invoke(timeLeft);
+        OnRoundStartAction?.Invoke(gameplayType);
     }
     
-    private void OnEndRound(APlayer winPlayer, GameEnum.RoundResult roundResult, int roundNum)
+    private void OnEndRound(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
     {
         AWinWindow winWindow = null;
-        if (AGameplay is PlayerVsComputerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsComputer>();
-        if (AGameplay is PlayerVsPlayerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsPlayer>();
-        if (AGameplay is SurvivalGameplay) winWindow = _windowsManager.OpenWindow<WinWindowSurvival>();
-        if (AGameplay is ChampionshipGameplay) winWindow = _windowsManager.OpenWindow<WinWindowChampionship>();
+        if (_gameplay is PlayerVsComputerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsComputer>();
+        if (_gameplay is PlayerVsPlayerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsPlayer>();
+        if (_gameplay is SurvivalGameplay) winWindow = _windowsManager.OpenWindow<WinWindowSurvival>();
+        if (_gameplay is ChampionshipGameplay) winWindow = _windowsManager.OpenWindow<WinWindowChampionship>();
         
-        winWindow.Initialize(winPlayer, AGameplay.FirstPlayer, AGameplay.SecondPlayer,
-            roundNum, roundResult,AGameplay.GameplayInfo);
+        winWindow.Initialize(gameData, roundResult, roundNum);
     }
 }

@@ -1,23 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameEnum : MonoBehaviour
 {
     public enum GameItem
     {
+        None,
         Rock,
         Paper,
-        Scissors,
-        None
+        Scissors
     }
 
     public enum RoundResult
     {
         None,
-        PlayerOneWin,
-        PlayerTwoWin,
+        PlayerWin,
+        BotWin,
         Draw
     }
     

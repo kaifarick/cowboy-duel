@@ -2,50 +2,32 @@
 
 public class PlayerVsPlayerGameplay : AGameplay
 {
-    private GameManager _gameManager;
 
-    private const int MOVE_TIME = 5;
+    private const int MOVE_TIME = 10;
     
     public PlayerVsPlayerGameplay(GameManager gameManager):base(GameEnum.GameplayType.TwoPlayers)
     {
-        _gameManager = gameManager;
+        GameData.RoundInfos.Add(1, new GameData.RoundInfo {FirstPlayerName = "Player One", SecondPlayerName = "Player Two" });
     }
+
 
     public override void StartRound()
     {
-        FirstPlayer = new Player("Player One", GameEnum.PlayersNumber.PlayerOne);
-        SecondPlayer = new Player("Player Two", GameEnum.PlayersNumber.PlayerTwo);
-
         base.StartRound();
         
-        _roundNum++;
-        
-        StartMoveTimer(MOVE_TIME, () => _gameManager.SelectedItem());
+        FirstPlayer = new Player(GameData.RoundInfos[_roundNum].FirstPlayerName, GameEnum.PlayersNumber.PlayerOne);
+        SecondPlayer = new Player(GameData.RoundInfos[_roundNum].SecondPlayerName, GameEnum.PlayersNumber.PlayerTwo);
+
+        StartMoveTimer(MOVE_TIME, EndRoundTime);
     }
     
-    public override void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)
-    {
-        base.OnSelectedItem(playersSelected, gameItem);
-        
-        ChangeQueue(SecondPlayer);
 
-        if(PlayersTurn == playersSelected) CheckPlayerWin();
-        else
-        {
-            StopMoveTimer();
-            StartMoveTimer(MOVE_TIME, () => _gameManager.SelectedItem());
-        }
-    }
-
-    protected override void StopMoveTimer()
-    {
-        TimerManager.RemoveWaiter("RoundTimer");
-        base.StopMoveTimer();
-    }
-
-    public override void EndGame()
+    private void EndRoundTime()
     {
         StopMoveTimer();
-        base.EndGame();
+        
+        if(FirstPlayer.GameItem == GameEnum.GameItem.None) SelectItem(GameEnum.PlayersNumber.PlayerOne);
+        if(SecondPlayer.GameItem == GameEnum.GameItem.None) SelectItem(GameEnum.PlayersNumber.PlayerTwo);
     }
+    
 }

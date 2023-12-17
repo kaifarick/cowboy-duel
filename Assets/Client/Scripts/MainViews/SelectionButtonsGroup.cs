@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -9,24 +10,39 @@ public class SelectionButtonsGroup : MonoBehaviour
     [SerializeField] private float _moveSpeed;
     [SerializeField] private Transform _centre;
     
-    [SerializeField] private GroupType _groupType;
+    [SerializeField] private GameEnum.PlayersNumber _playersNumber;
+
+    private Action<GameEnum.PlayersNumber, GameEnum.GameItem> _onSelectionButtonClickAction;
 
 
-    public void Initialize(GameView gameView)
+    public void Initialize(GameView gameView, Action<GameEnum.PlayersNumber,GameEnum.GameItem> onSelectionButtonClickAction)
     {
+        _onSelectionButtonClickAction = onSelectionButtonClickAction;
+        
         foreach (var button in _selectionItemButton)
         {
-            button.Initialize(gameView, _centre, _moveSpeed);
+            button.Initialize(gameView, _centre, _moveSpeed, OnSelectionButtonClick);
         }
 
-        gameView.OnGameStartAction += OnGameStart;
+        gameView.OnRoundStartAction += OnRoundStart;
         gameView.OnGameEndAction += OnGameEnd;
+        gameView.OnSelectionItemAction += OnSelectionItem;
 
     }
 
-    private void OnGameStart(AGameplay aGameplay)
+    private void OnSelectionButtonClick(GameEnum.GameItem gameItem)
     {
-        if (_groupType == GroupType.MainGroup || aGameplay.GameplayType == GameEnum.GameplayType.TwoPlayers)
+        _onSelectionButtonClickAction?.Invoke(_playersNumber, gameItem);
+    }
+
+    private void OnSelectionItem(GameEnum.PlayersNumber playersNumber)
+    {
+        if (_playersNumber == playersNumber) gameObject.SetActive(false);
+    }
+
+    private void OnRoundStart(GameEnum.GameplayType gameplayType)
+    {
+        if (_playersNumber == GameEnum.PlayersNumber.PlayerOne || gameplayType == GameEnum.GameplayType.TwoPlayers)
         {
             gameObject.SetActive(true);
         }
@@ -40,11 +56,5 @@ public class SelectionButtonsGroup : MonoBehaviour
     private void Reset()
     {
         _selectionItemButton = GetComponentsInChildren<SelectionItemButton>().ToList();
-    }
-    
-    private enum GroupType
-    {
-        MainGroup,
-        AdditionGroup
     }
 }

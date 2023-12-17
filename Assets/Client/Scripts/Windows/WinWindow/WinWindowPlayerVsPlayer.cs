@@ -5,9 +5,9 @@ public class WinWindowPlayerVsPlayer : AWinWindow
 {
     
     
-    public override void Initialize(APlayer winPlayer, APlayer firstPlayer, APlayer secondPlayer, int roundNum, GameEnum.RoundResult gameResult, object gameplayInfo)
+    public override void Initialize(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
     {
-        base.Initialize(winPlayer, firstPlayer, secondPlayer, roundNum,gameResult, gameplayInfo);
+        base.Initialize(gameData, roundResult, roundNum);
         
         _resumeButton.onClick.AddListener((() =>  _gameManager.GameEnd()));
     }

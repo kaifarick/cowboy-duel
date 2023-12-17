@@ -1,81 +1,100 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 public abstract class AGameplay
 {
-    public APlayer FirstPlayer { get; protected set; }
-    public APlayer SecondPlayer { get; protected set; }
-    public APlayer PlayersTurn { get; protected set; }
-    public APlayer PlayersWin { get; protected set; }
-    public GameEnum.GameplayType GameplayType { get; protected set; }
-    public object GameplayInfo { get; protected set; }
-
+    protected APlayer FirstPlayer;
+    protected APlayer SecondPlayer;
+    protected APlayer PlayersWin;
+    
+    protected GameEnum.GameplayType GameplayType;
     protected GameEnum.RoundResult _roundResult;
-    protected int _timeLeft;
+    protected GameData GameData;
+    
+    protected int _roundTimeLeft;
     protected int _roundNum;
     
-
-    public event Action<APlayer> OnChangeQueueAction;
-    public event Action<APlayer, GameEnum.RoundResult, int> OnEndRoundAction;
+    
+    public event Action<GameData, GameEnum.RoundResult, int> OnEndRoundAction;
+    public event Action<GameEnum.GameplayType> OnRoundStartAction;
+    
     
     public event Action OnStopMoveTimeAction;
     public event Action<int> OnStartMoveTimerAction;
     public event Action<int> OnTimerTickAction;
 
+    
+    public event Action<GameEnum.PlayersNumber, GameEnum.GameItem> OnSelectedItemAction;
 
     protected AGameplay(GameEnum.GameplayType gameplayType)
     {
         GameplayType = gameplayType;
+        
+        GameData = new GameData(){RoundInfos = new Dictionary<int, GameData.RoundInfo>()};
     }
-    
-    
+
+
     public virtual void StartRound()
     {
-        Debug.Log($"RoundResult{_roundResult}");
-        PlayersTurn = FirstPlayer;
+        if(_roundResult != GameEnum.RoundResult.Draw) _roundNum++;
+        if(!GameData.RoundInfos.ContainsKey(_roundNum)) GameData.RoundInfos.Add(_roundNum, new GameData.RoundInfo());
         
-        ChangeQueue(FirstPlayer);
+        OnRoundStartAction?.Invoke(GameplayType);
+        
+        Debug.Log($"RoundResult{_roundResult} RoundNum{_roundNum}");
     }
-    
+
+
     public virtual void EndGame()
     {
         _roundNum = 0;
     }
     
-    public virtual void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)
+    public virtual void SelectItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem = GameEnum.GameItem.None)
     {
-        playersSelected?.SelectItem(gameItem);
-    }
+        if (playersNumber == GameEnum.PlayersNumber.PlayerOne)
+        {
+            FirstPlayer?.SelectItem(gameItem);
+            GameData.RoundInfos[_roundNum].FirstPlayerItem = FirstPlayer.GameItem;
+        }
 
-    protected virtual void EndRound()
-    {
-        OnEndRoundAction?.Invoke(PlayersWin, _roundResult, _roundNum);
-    }
-
-    protected void ChangeQueue(APlayer playerQueue)
-    {
-        PlayersTurn = playerQueue;
-        OnChangeQueueAction?.Invoke(playerQueue);
+        if (playersNumber == GameEnum.PlayersNumber.PlayerTwo)
+        {
+            SecondPlayer?.SelectItem(gameItem);
+            GameData.RoundInfos[_roundNum].SecondPlayerItem = SecondPlayer.GameItem;
+        }
+        
+        OnSelectedItemAction?.Invoke(playersNumber,gameItem);
+        
+        if(FirstPlayer?.GameItem != GameEnum.GameItem.None && SecondPlayer?.GameItem != GameEnum.GameItem.None) CheckRoundResult();
     }
     
-    protected virtual void StopMoveTimer()
+    protected virtual void EndRound()
     {
+        GameData.RoundInfos[_roundNum].WinnerName = PlayersWin?.Name;
+
+        OnEndRoundAction?.Invoke(GameData, _roundResult, _roundNum);
+    }
+
+    protected void StopMoveTimer()
+    {
+        TimerManager.RemoveWaiter("RoundTimer");
         OnStopMoveTimeAction?.Invoke();
     }
 
     protected void StartMoveTimer(int time, Action callback)
     {
-        _timeLeft = time;
+        _roundTimeLeft = time;
         TimerManager.WaitAndCall("RoundTimer", time, callback, () =>
         {
-            _timeLeft--;
-            OnTimerTickAction?.Invoke(_timeLeft);
+            _roundTimeLeft--;
+            OnTimerTickAction?.Invoke(_roundTimeLeft);
         });
         OnStartMoveTimerAction?.Invoke(time);
     }
 
-    protected void CheckPlayerWin()
+    private void CheckRoundResult()
     {
         if (FirstPlayer.GameItem == GameEnum.GameItem.Rock)
         {
@@ -85,13 +104,11 @@ public abstract class AGameplay
                     _roundResult = GameEnum.RoundResult.Draw;
                     break;
                 case GameEnum.GameItem.Paper:
-                    _roundResult = GameEnum.RoundResult.PlayerTwoWin;
                     PlayersWin = SecondPlayer;
                     FirstPlayer.SetWinState(false);
                     SecondPlayer.SetWinState(true);
                     break;
                 case GameEnum.GameItem.Scissors:
-                    _roundResult = GameEnum.RoundResult.PlayerOneWin;
                     PlayersWin = FirstPlayer;
                     FirstPlayer.SetWinState(true);
                     SecondPlayer.SetWinState(false);
@@ -104,7 +121,6 @@ public abstract class AGameplay
             switch (SecondPlayer.GameItem)
             {
                 case GameEnum.GameItem.Rock:
-                    _roundResult = GameEnum.RoundResult.PlayerOneWin;
                     PlayersWin = FirstPlayer;
                     FirstPlayer.SetWinState(true);
                     SecondPlayer.SetWinState(false);
@@ -113,7 +129,6 @@ public abstract class AGameplay
                     _roundResult = GameEnum.RoundResult.Draw;
                     break;
                 case GameEnum.GameItem.Scissors:
-                    _roundResult = GameEnum.RoundResult.PlayerTwoWin;
                     PlayersWin = SecondPlayer;
                     FirstPlayer.SetWinState(false);
                     SecondPlayer.SetWinState(true);
@@ -126,13 +141,11 @@ public abstract class AGameplay
             switch (SecondPlayer?.GameItem)
             {
                 case GameEnum.GameItem.Rock:
-                    _roundResult = GameEnum.RoundResult.PlayerTwoWin;
                     PlayersWin = SecondPlayer;
                     FirstPlayer.SetWinState(false);
                     SecondPlayer.SetWinState(true);
                     break;
                 case GameEnum.GameItem.Paper:
-                    _roundResult = GameEnum.RoundResult.PlayerOneWin;
                     PlayersWin = FirstPlayer;
                     FirstPlayer.SetWinState(true);
                     SecondPlayer.SetWinState(false);
@@ -142,6 +155,14 @@ public abstract class AGameplay
                     break;
             }
         }
+
+        if (PlayersWin is BotPlayer)
+        {
+            _roundResult = GameEnum.RoundResult.BotWin;
+            GameData.RoundInfos[_roundNum].IsBotWin = true;
+        }
+        
+        else if (PlayersWin is Player) _roundResult = GameEnum.RoundResult.PlayerWin;
         
         EndRound();
     }

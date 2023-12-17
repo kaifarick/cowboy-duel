@@ -20,23 +20,23 @@ public class WinWindowSurvival : AWinWindow
         _gameManager.OnGameEndAction += OnGameEnd;
     }
 
-    public override void Initialize(APlayer winPlayer, APlayer firstPlayer, APlayer secondPlayer, int roundNum, GameEnum.RoundResult gameResult, object gameplayInfo)
+    public override void Initialize(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
     {
-        base.Initialize(winPlayer, firstPlayer, secondPlayer,roundNum,gameResult, gameplayInfo);
+        base.Initialize(gameData, roundResult, roundNum);
         
         _resumeButton.onClick.AddListener(() =>
         {
-            if(winPlayer is Player || gameResult == GameEnum.RoundResult.Draw) _gameManager.StartRound();
+            if(!gameData.RoundInfos[roundNum].IsBotWin || roundResult == GameEnum.RoundResult.Draw) _gameManager.StartRound();
             else  _gameManager.GameEnd();;
         });
 
         _roundText.text = $"Round: {roundNum}";
         
-        AddResult(secondPlayer);
+        AddOpponentResult(gameData.RoundInfos[roundNum]);
         
     }
 
-    private void AddResult(APlayer opponent)
+    private void AddOpponentResult(GameData.RoundInfo roundInfo)
     {
         if(_resultsElements.Count >= 15 && _resultsElements.TrueForAll((element => element.isActiveAndEnabled)))
             _resultsElements.ForEach((element => element.gameObject.SetActive(false)));
@@ -51,7 +51,8 @@ public class WinWindowSurvival : AWinWindow
             _resultsElements.Add(currentElement);
         } 
         
-        currentElement.Initialize($"{opponent.Name} {opponent.GameItem}");
+        
+        currentElement.Initialize($"{roundInfo.SecondPlayerName} {roundInfo.SecondPlayerItem}");
     }
 
     private void OnGameEnd()
