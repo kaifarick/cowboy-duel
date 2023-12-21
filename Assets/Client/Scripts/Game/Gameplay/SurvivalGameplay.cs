@@ -4,7 +4,7 @@ public class SurvivalGameplay : AGameplay
 {
     public SurvivalGameplay(GameManager gameManager):base(GameEnum.GameplayType.OnePlayer)
     {
-        GameData.RoundInfos.Add(1, new GameData.RoundInfo { FirstPlayerName = "Player One", SecondPlayerName = "Player Two" });
+
     }
     
     public override void StartRound()
@@ -14,9 +14,16 @@ public class SurvivalGameplay : AGameplay
         FirstPlayer = new Player("You", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new BotPlayer(GameEnum.PlayersNumber.PlayerTwo);
 
-        GameData.RoundInfos[_roundNum].FirstPlayerName = FirstPlayer.Name;
-        GameData.RoundInfos[_roundNum].SecondPlayerName = SecondPlayer.Name;
-        
-        GameData.RoundInfos[_roundNum].SecondPlayerItem = SecondPlayer.GameItem;
+        GameData.RoundInfos[_roundNum].FirstPlayer.Name = FirstPlayer.Name;
+        GameData.RoundInfos[_roundNum].SecondPlayer.Name = SecondPlayer.Name;
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.GameItem = FirstPlayer.GameItem;
+        GameData.RoundInfos[_roundNum].SecondPlayer.GameItem = SecondPlayer.GameItem;
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.PlayersNumber = FirstPlayer.PlayersNumber;
+        GameData.RoundInfos[_roundNum].SecondPlayer.PlayersNumber = SecondPlayer.PlayersNumber;
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.IsBot = FirstPlayer.IsBot;
+        GameData.RoundInfos[_roundNum].SecondPlayer.IsBot = SecondPlayer.IsBot;
     }
 }

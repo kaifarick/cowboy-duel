@@ -31,11 +31,11 @@ public class WinWindowChampionship : AWinWindow
             List<BracketElement> semifinalLeft = _bracketElements.FindAll((element =>  element.Stage == BracketElement.TournamentStage.Semifinal && element.Side == BracketElement.TournamentSide.Left));
             List<BracketElement> semifinalRight = _bracketElements.FindAll((element =>  element.Stage == BracketElement.TournamentStage.Semifinal && element.Side == BracketElement.TournamentSide.Right));
 
-            semifinalLeft[0].Initialize(gameData.RoundInfos[1].FirstPlayerName);
-            semifinalLeft[1].Initialize(gameData.RoundInfos[1].SecondPlayerName);
+            semifinalLeft[0].Initialize(gameData.RoundInfos[1].FirstPlayer.Name);
+            semifinalLeft[1].Initialize(gameData.RoundInfos[1].SecondPlayer.Name);
             
-            semifinalRight[0].Initialize(gameData.RoundInfos[2].FirstPlayerName);
-            semifinalRight[1].Initialize(gameData.RoundInfos[2].SecondPlayerName);
+            semifinalRight[0].Initialize(gameData.RoundInfos[2].FirstPlayer.Name);
+            semifinalRight[1].Initialize(gameData.RoundInfos[2].SecondPlayer.Name);
             
             winElement = _bracketElements.FirstOrDefault((element => element.Side == BracketElement.TournamentSide.Left && element.Stage == BracketElement.TournamentStage.Final));
         }
@@ -48,7 +48,7 @@ public class WinWindowChampionship : AWinWindow
             winElement = _bracketElements.FirstOrDefault((element => element.Stage == BracketElement.TournamentStage.Winner));
         }
         
-        if(roundResult!= GameEnum.RoundResult.Draw) winElement.Initialize(gameData.RoundInfos[roundNum].WinnerName);
+        if(roundResult!= GameEnum.RoundResult.Draw) winElement.Initialize(gameData.RoundInfos[roundNum].WinnerPlayer.Name);
     }
 
     private void OnGameEnd()

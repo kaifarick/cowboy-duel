@@ -7,11 +7,14 @@ public class MainSceneInstaller : MonoInstaller
     [SerializeField] private WindowsManager _windowsManager;
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private SoundManager _soundManager;
+    [SerializeField] private MainCamera _mainCamera;
 
     public override void InstallBindings()
     {
         Container.BindInterfacesAndSelfTo<WindowsManager>().FromInstance(_windowsManager).AsSingle();
         Container.BindInterfacesAndSelfTo<GameManager>().FromInstance(_gameManager).AsSingle();
         Container.BindInterfacesAndSelfTo<SoundManager>().FromInstance(_soundManager).AsSingle();
+        Container.BindInterfacesAndSelfTo<MainCamera>().FromInstance(_mainCamera).AsSingle();
+        
     }
 }

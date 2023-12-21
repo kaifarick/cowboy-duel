@@ -21,7 +21,7 @@ public class SelectionButtonsGroup : MonoBehaviour
         
         foreach (var button in _selectionItemButton)
         {
-            button.Initialize(gameView, _centre, _moveSpeed, OnSelectionButtonClick);
+            button.Initialize(gameView, _centre, _moveSpeed, SelectionButtonClick);
         }
 
         gameView.OnRoundStartAction += OnRoundStart;
@@ -30,7 +30,7 @@ public class SelectionButtonsGroup : MonoBehaviour
 
     }
 
-    private void OnSelectionButtonClick(GameEnum.GameItem gameItem)
+    private void SelectionButtonClick(GameEnum.GameItem gameItem)
     {
         _onSelectionButtonClickAction?.Invoke(_playersNumber, gameItem);
     }

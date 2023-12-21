@@ -20,6 +20,7 @@ public class GameEnum : MonoBehaviour
     
     public enum PlayersNumber
     {
+        None,
         PlayerOne,
         PlayerTwo
     }

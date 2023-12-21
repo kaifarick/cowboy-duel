@@ -324,6 +324,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3964587866784280114, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -205
+      objectReference: {fileID: 0}
     - target: {fileID: 4312307630749532257, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -410,15 +414,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5073409327512534978, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1700
+      value: 1440
       objectReference: {fileID: 0}
     - target: {fileID: 5890608660627868125, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_Name
-      value: WinWindowChampionship Variant
+      value: WinWindowChampionship
       objectReference: {fileID: 0}
     - target: {fileID: 5890608660627868125, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7114920486603244073, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -338
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}

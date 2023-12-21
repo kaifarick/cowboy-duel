@@ -520,15 +520,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5073409327512534978, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1500
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5073409327512534978, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5890608660627868125, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_Name
-      value: WinWindowSurvival Variant
+      value: WinWindowSurvival
       objectReference: {fileID: 0}
     - target: {fileID: 5890608660627868125, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_IsActive

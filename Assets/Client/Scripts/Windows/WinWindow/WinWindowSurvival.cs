@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 
@@ -26,7 +25,7 @@ public class WinWindowSurvival : AWinWindow
         
         _resumeButton.onClick.AddListener(() =>
         {
-            if(!gameData.RoundInfos[roundNum].IsBotWin || roundResult == GameEnum.RoundResult.Draw) _gameManager.StartRound();
+            if(!gameData.RoundInfos[roundNum].WinnerPlayer.IsBot || roundResult == GameEnum.RoundResult.Draw) _gameManager.StartRound();
             else  _gameManager.GameEnd();;
         });
 
@@ -52,7 +51,7 @@ public class WinWindowSurvival : AWinWindow
         } 
         
         
-        currentElement.Initialize($"{roundInfo.SecondPlayerName} {roundInfo.SecondPlayerItem}");
+        currentElement.Initialize($"{roundInfo.SecondPlayer.Name} {roundInfo.SecondPlayer.GameItem}");
     }
 
     private void OnGameEnd()

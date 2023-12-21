@@ -20,11 +20,11 @@ public abstract class AWinWindow : BaseWindow
 
     public virtual void Initialize(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
     {
-        string winTxt = roundResult == GameEnum.RoundResult.Draw ? roundResult.ToString() : $"{gameData.RoundInfos[roundNum].WinnerName} win!";
+        string winTxt = roundResult == GameEnum.RoundResult.Draw ? roundResult.ToString() : $"{gameData.RoundInfos[roundNum].WinnerPlayer.Name} win!";
         _winPlayerTxt.text = winTxt;
         
-        _playerOneItemTxt.text = $"{gameData.RoundInfos[roundNum].FirstPlayerName} {gameData.RoundInfos[roundNum].FirstPlayerItem}";
-        _playerTwoItemTxt.text = $"{gameData.RoundInfos[roundNum].SecondPlayerName} {gameData.RoundInfos[roundNum].SecondPlayerItem}";
+        _playerOneItemTxt.text = $"{gameData.RoundInfos[roundNum].FirstPlayer.Name} {gameData.RoundInfos[roundNum].FirstPlayer.GameItem}";
+        _playerTwoItemTxt.text = $"{gameData.RoundInfos[roundNum].SecondPlayer.Name} {gameData.RoundInfos[roundNum].SecondPlayer.GameItem}";
         
         _resumeButton.onClick.AddListener(Hide);
         

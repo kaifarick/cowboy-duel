@@ -11,17 +11,16 @@ public class GameManager : MonoBehaviour
     public event Action OnGameEndAction;
     public event Action<GamePresenter> OnGameStartAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
-
+    
+        
     [Inject] private WindowsManager _windowsManager;
-    
-    
-   
+
+
     public void StartGame(AGameplay gameplay)
     {
         _gameplay = gameplay;
-        _gamePresenter = new GamePresenter(gameplay, this);
-
-        gameplay.OnEndRoundAction += OnEndRound;
+        _gamePresenter = new GamePresenter(gameplay, this, _windowsManager);
+        
         gameplay.OnRoundStartAction += OnRoundStart;
 
         OnGameStartAction?.Invoke(_gamePresenter);
@@ -40,7 +39,6 @@ public class GameManager : MonoBehaviour
         _gameplay.EndGame();
         OnGameEndAction?.Invoke();
         
-        _gameplay.OnEndRoundAction -= OnEndRound;
         _gameplay.OnRoundStartAction -= OnRoundStart;
     }
 
@@ -48,16 +46,5 @@ public class GameManager : MonoBehaviour
     private void OnRoundStart(GameEnum.GameplayType gameplayType)
     {
         OnRoundStartAction?.Invoke(gameplayType);
-    }
-    
-    private void OnEndRound(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
-    {
-        AWinWindow winWindow = null;
-        if (_gameplay is PlayerVsComputerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsComputer>();
-        if (_gameplay is PlayerVsPlayerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsPlayer>();
-        if (_gameplay is SurvivalGameplay) winWindow = _windowsManager.OpenWindow<WinWindowSurvival>();
-        if (_gameplay is ChampionshipGameplay) winWindow = _windowsManager.OpenWindow<WinWindowChampionship>();
-        
-        winWindow.Initialize(gameData, roundResult, roundNum);
     }
 }

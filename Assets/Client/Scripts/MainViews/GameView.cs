@@ -7,20 +7,22 @@ using Zenject;
 
 public class GameView : MonoBehaviour
 {
-    [Header("Text")]
+
+    [SerializeField] private Button _homeButton;
+    [SerializeField] private Canvas _canvas;
     [SerializeField] private TextMeshProUGUI _timer;
+    [SerializeField] private List<SelectionButtonsGroup> _selectionButtonsGroup;
 
     [Space]
-    [SerializeField] private Button _homeButton;
-    [SerializeField] private List<SelectionButtonsGroup> _selectionButtonsGroup;
-    [SerializeField] private Canvas _canvas;
-    
+    [SerializeField] private CowboyView _playerOneCowboy;
+    [SerializeField] private CowboyView _playerTwoCowboy;
+
 
     [Inject] private GameManager _gameManager;
 
     public event Action<GameEnum.PlayersNumber> OnSelectionItemAction;
-    public event Action OnGameEndAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
+    public event Action OnGameEndAction;
     
 
     private GamePresenter _gamePresenter;
@@ -29,6 +31,7 @@ public class GameView : MonoBehaviour
     private void Awake()
     {
         SetButtons();
+       
     }
 
     private void Start()
@@ -45,10 +48,14 @@ public class GameView : MonoBehaviour
         
         foreach (var buttonsGroup in _selectionButtonsGroup)
         {
-            buttonsGroup.Initialize(this,  (number, item) => _gamePresenter.SelectedItemClick(number,item));
+            buttonsGroup.Initialize(this,  SelectedItem);
         }
     }
-    
+
+    private void SelectedItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem)
+    {
+        _gamePresenter.SelectedItemClick(playersNumber, gameItem);
+    }
     
 
     private void OnStartGame(GamePresenter gamePresenter)
