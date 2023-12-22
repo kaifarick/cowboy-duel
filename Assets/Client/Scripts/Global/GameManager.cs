@@ -1,96 +1,98 @@
 #nullable enable
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
 public class GameManager : MonoBehaviour
 {
-    public AGameplay AGameplay { get; private set; }
+    private AGameplay _gameplay;
+    private GamePresenter _gamePresenter;
     
     public event Action OnGameEndAction;
-    public event Action OnGameStartAction;
-    
-    public event Action<APlayer> OnChangeQueueAction;
-    public event Action<APlayer,GameEnum.GameItem> OnSelectionItemAction;
+    public event Action<GamePresenter> OnGameStartAction;
+    public event Action<GameEnum.GameplayType> OnRoundStartAction;
+    public event Action<Action<GameEnum.PrepareGameplayPoint>> OnPrepareRoundAction;
 
-    
-    public event Action<int> OnStartMoveTimerAction;
-    public event Action<int> OnTimerTickAction;
-    public event Action  OnEndMoveTimerAction;
+
+    private Dictionary<GameEnum.PrepareGameplayPoint, bool> _prepareGameplayPoints =
+        new Dictionary<GameEnum.PrepareGameplayPoint, bool>()
+        {
+            {GameEnum.PrepareGameplayPoint.Animations, false}
+        };
+
 
     [Inject] private WindowsManager _windowsManager;
 
+
     public void StartGame(AGameplay gameplay)
     {
-        AGameplay = gameplay;
+        _gameplay = gameplay;
+        _gamePresenter = new GamePresenter(gameplay, this, _windowsManager);
         
-        gameplay.OnChangeQueueAction += OnChangeQueue;
-        gameplay.OnEndRoundAction += OnEndRound;
-        gameplay.OnStartMoveTimerAction += OnStartMoveTimer;
-        gameplay.OnStopMoveTimeAction += OnStopMoveTimer;
-        gameplay.OnTimerTickAction += OnTimerTick;
+        gameplay.OnRoundStartAction += OnRoundStart;
+        gameplay.OnGameEndAction += OnGameEnd;
+        gameplay.OnEndRoundAction += OnRoundEnd;
+
+        OnGameStartAction?.Invoke(_gamePresenter);
         
-        OnGameStartAction?.Invoke();
-        
-        StartRound();
+        PrepareGameRound();
+    }
+    
+    public void PrepareGameRound()
+    {
+        OnPrepareRoundAction?.Invoke(OnPrepareRound);
     }
 
-    public void StartRound()
-    {
-        AGameplay.StartRound();
-    }
-    
-    public void SelectedItem(GameEnum.GameItem gameItem = GameEnum.GameItem.None)
-    {
-        var playerTurn = AGameplay.PlayersTurn;
-        
-        AGameplay.OnSelectedItem(playerTurn, gameItem);
-        OnSelectionItemAction?.Invoke(playerTurn,gameItem);
-    }
-    
+
     public void GameEnd()
     {
-        AGameplay.EndGame();
-        OnGameEndAction?.Invoke();
-        
-        AGameplay.OnChangeQueueAction -= OnChangeQueue;
-        AGameplay.OnEndRoundAction -= OnEndRound;
-        AGameplay.OnStartMoveTimerAction -= OnStartMoveTimer;
-        AGameplay.OnStopMoveTimeAction -= OnStopMoveTimer;
-        AGameplay.OnTimerTickAction -= OnTimerTick;
-    }
-
-    private void OnStartMoveTimer(int time)
-    {
-        OnStartMoveTimerAction?.Invoke(time);
-    }
-
-    private void OnStopMoveTimer()
-    {
-        OnEndMoveTimerAction?.Invoke();
-    }
-
-    private void OnChangeQueue(APlayer player)
-    {
-        OnChangeQueueAction?.Invoke(player);
-    }
-
-    private void OnTimerTick(int timeLeft)
-    {
-        OnTimerTickAction?.Invoke(timeLeft);
+        _gameplay.EndGame();
     }
     
-    private void OnEndRound(APlayer winPlayer, GameEnum.RoundResult roundResult, int roundNum)
+    private void StartRound()
     {
-        AWinWindow winWindow = null;
-        if (AGameplay is PlayerVsComputerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsComputer>();
-        if (AGameplay is PlayerVsPlayerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsPlayer>();
-        if (AGameplay is SurvivalGameplay) winWindow = _windowsManager.OpenWindow<WinWindowSurvival>();
-        if (AGameplay is ChampionshipGameplay) winWindow = _windowsManager.OpenWindow<WinWindowChampionship>();
+        _gameplay.StartRound();
+    }
+    
+    private void ResetData()
+    {
+        foreach (var point in _prepareGameplayPoints.Keys.ToList())
+        {
+            _prepareGameplayPoints[point] = false;
+        }
+    }
+
+    private void OnPrepareRound(GameEnum.PrepareGameplayPoint prepareGameplayPoint)
+    {
+        if(_prepareGameplayPoints[prepareGameplayPoint]) return;
         
-        winWindow.Initialize(winPlayer, AGameplay.FirstPlayer, AGameplay.SecondPlayer,
-            roundNum, roundResult,AGameplay.GameplayInfo);
+        _prepareGameplayPoints[prepareGameplayPoint] = true;
+        if (!_prepareGameplayPoints.ContainsValue(false))
+        {
+            StartRound();
+        }
+    }
+
+
+    private void OnGameEnd()
+    {
+        ResetData();
+        
+        _gameplay.OnRoundStartAction -= OnRoundStart;
+        _gameplay.OnGameEndAction -= OnGameEnd;
+        
+        OnGameEndAction?.Invoke();
+    }
+
+    private void OnRoundEnd(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
+    {
+        ResetData();
+    }
+
+    private void OnRoundStart(GameEnum.GameplayType gameplayType)
+    {
+        OnRoundStartAction?.Invoke(gameplayType);
     }
 }

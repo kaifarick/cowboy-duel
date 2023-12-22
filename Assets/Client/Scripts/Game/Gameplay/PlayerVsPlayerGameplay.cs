@@ -2,50 +2,56 @@
 
 public class PlayerVsPlayerGameplay : AGameplay
 {
-    private GameManager _gameManager;
 
-    private const int MOVE_TIME = 5;
+    private const int MOVE_TIME = 10;
     
-    public PlayerVsPlayerGameplay(GameManager gameManager)
+    public PlayerVsPlayerGameplay(GameManager gameManager):base(GameEnum.GameplayType.TwoPlayers)
     {
-        _gameManager = gameManager;
     }
+
 
     public override void StartRound()
     {
+        base.StartRound();
+        
         FirstPlayer = new Player("Player One", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new Player("Player Two", GameEnum.PlayersNumber.PlayerTwo);
 
-        base.StartRound();
-        
-        _roundNum++;
-        
-        StartMoveTimer(MOVE_TIME, () => _gameManager.SelectedItem());
+        GameData.RoundInfos[_roundNum].FirstPlayer.Name = FirstPlayer.Name;
+        GameData.RoundInfos[_roundNum].SecondPlayer.Name = SecondPlayer.Name;
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.GameItem = FirstPlayer.GameItem;
+        GameData.RoundInfos[_roundNum].SecondPlayer.GameItem = SecondPlayer.GameItem;
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.PlayersNumber = FirstPlayer.PlayersNumber;
+        GameData.RoundInfos[_roundNum].SecondPlayer.PlayersNumber = SecondPlayer.PlayersNumber;
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.IsBot = FirstPlayer.IsBot;
+        GameData.RoundInfos[_roundNum].SecondPlayer.IsBot = SecondPlayer.IsBot;
+
+        StartMoveTimer(MOVE_TIME, EndRoundTime);
     }
     
-    public override void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)
-    {
-        base.OnSelectedItem(playersSelected, gameItem);
-        
-        ChangeQueue(SecondPlayer);
 
-        if(PlayersTurn == playersSelected) CheckPlayerWin();
-        else
-        {
-            StopMoveTimer();
-            StartMoveTimer(MOVE_TIME, () => _gameManager.SelectedItem());
-        }
+    private void EndRoundTime()
+    {
+        StopMoveTimer();
+        
+        if(FirstPlayer.GameItem == GameEnum.GameItem.None) SelectItem(GameEnum.PlayersNumber.PlayerOne);
+        if(SecondPlayer.GameItem == GameEnum.GameItem.None) SelectItem(GameEnum.PlayersNumber.PlayerTwo);
     }
 
-    protected override void StopMoveTimer()
+    protected override void EndRound()
     {
-        TimerManager.RemoveWaiter("RoundTimer");
-        base.StopMoveTimer();
+        base.EndRound();
+        
+        StopMoveTimer();
     }
 
     public override void EndGame()
     {
-        StopMoveTimer();
         base.EndGame();
+        
+        StopMoveTimer();
     }
 }

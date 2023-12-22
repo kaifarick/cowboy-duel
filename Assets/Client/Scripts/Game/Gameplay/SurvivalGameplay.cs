@@ -2,30 +2,28 @@
 
 public class SurvivalGameplay : AGameplay
 {
-    private GameManager _gameManager;
-    public SurvivalGameplay(GameManager gameManager)
+    public SurvivalGameplay(GameManager gameManager):base(GameEnum.GameplayType.OnePlayer)
     {
-        _gameManager = gameManager;
+
     }
     
     public override void StartRound()
     {
+        base.StartRound();
+        
         FirstPlayer = new Player("You", GameEnum.PlayersNumber.PlayerOne);
         SecondPlayer = new BotPlayer(GameEnum.PlayersNumber.PlayerTwo);
-        
-        if(_roundResult != GameEnum.RoundResult.Draw) _roundNum++;
-        
-        base.StartRound();
-    }
-    
-    public override void OnSelectedItem(APlayer playersSelected, GameEnum.GameItem gameItem)
-    {
-        base.OnSelectedItem(playersSelected, gameItem);
-        
-        ChangeQueue(SecondPlayer);
-        
-        //bot move
-        if(PlayersTurn != playersSelected) _gameManager.SelectedItem();
-        else CheckPlayerWin();
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.Name = FirstPlayer.Name;
+        GameData.RoundInfos[_roundNum].SecondPlayer.Name = SecondPlayer.Name;
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.GameItem = FirstPlayer.GameItem;
+        GameData.RoundInfos[_roundNum].SecondPlayer.GameItem = SecondPlayer.GameItem;
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.PlayersNumber = FirstPlayer.PlayersNumber;
+        GameData.RoundInfos[_roundNum].SecondPlayer.PlayersNumber = SecondPlayer.PlayersNumber;
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.IsBot = FirstPlayer.IsBot;
+        GameData.RoundInfos[_roundNum].SecondPlayer.IsBot = SecondPlayer.IsBot;
     }
 }
