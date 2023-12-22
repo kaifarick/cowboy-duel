@@ -1,12 +1,11 @@
-
 using System;
 using DG.Tweening;
-using Zenject;
 
 public class GamePresenter
 {
     public event Action<GameEnum.PlayersNumber,GameEnum.GameItem> OnSelectionItemAction;
     public event Action<GameData> OnEndRoundAction;
+    public event Action<Action<GameEnum.PrepareGameplayPoint>> OnPrepareRoundAction;
     
     
     public event Action<int> OnStartMoveTimerAction;
@@ -27,6 +26,7 @@ public class GamePresenter
 
         gameManager.OnGameStartAction += OnStartGame;
         gameManager.OnGameEndAction += OnGameEnd;
+        gameManager.OnPrepareRoundAction += OnPrepareRound;
     }
 
     public void SelectedItemClick(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem)
@@ -67,6 +67,11 @@ public class GamePresenter
         sequence.AppendInterval(winWindowDelay).AppendCallback((() => ShowWinWindow(gameData,roundResult,roundNum)));
 
     }
+    
+    private void OnPrepareRound(Action<GameEnum.PrepareGameplayPoint> onComplete)
+    {
+        OnPrepareRoundAction?.Invoke((point => onComplete?.Invoke(point)));
+    }
 
     private void ShowWinWindow(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
     {
@@ -79,6 +84,9 @@ public class GamePresenter
         winWindow.Initialize(gameData, roundResult, roundNum);
     }
 
+
+
+    #region Timer
 
     private void OnStartMoveTimer(int time)
     {
@@ -94,5 +102,7 @@ public class GamePresenter
     {
         OnTimerTickAction?.Invoke(timeLeft);
     }
+    
+    #endregion
 
 }

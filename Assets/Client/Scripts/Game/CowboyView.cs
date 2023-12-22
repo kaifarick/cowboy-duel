@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;
@@ -12,6 +13,7 @@ public class CowboyView : MonoBehaviour
     [Inject] private MainCamera _mainCamera;
 
     private GamePresenter _gamePresenter;
+    private Sequence _moveSequence;
 
     private Vector3 _startPosition;
     private Vector3 _shootPosition;
@@ -21,9 +23,8 @@ public class CowboyView : MonoBehaviour
     {
         _gameManager.OnGameStartAction += OnGameStart;
         _gameManager.OnGameEndAction += OnGameEnd;
-        _gameManager.OnRoundStartAction += OnRoundStart;
-        
-        
+
+
         var preSpace = 500;
         _startPosition = _playersNumber == GameEnum.PlayersNumber.PlayerOne
             ? _mainCamera.GetLeftPointWithSpace(-preSpace)
@@ -41,23 +42,32 @@ public class CowboyView : MonoBehaviour
         _gamePresenter = gamePresenter;
 
         _gamePresenter.OnEndRoundAction += OnEndRound;
+        _gamePresenter.OnPrepareRoundAction += OnPrepareRound;
     }
 
     private void OnGameEnd()
     {
+        _moveSequence.Kill();
+        Debug.Log("sequKILL");
+        
         transform.position = new Vector3(_startPosition.x, transform.position.y, transform.position.z);
         
         _gamePresenter.OnEndRoundAction -= OnEndRound;
+        _gamePresenter.OnPrepareRoundAction -= OnPrepareRound;
     }
 
-    private void OnRoundStart(GameEnum.GameplayType gameplayType)
+    private void OnPrepareRound(Action<GameEnum.PrepareGameplayPoint> onComplete)
     {
+        
+        Debug.Log("prepare");
         transform.position = new Vector3(_startPosition.x, transform.position.y, transform.position.z);
         
 
         _animator.SetTrigger("Walk");
-        Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMoveX(_shootPosition.x, 2.5f)).InsertCallback(2f, (() => _animator.SetTrigger("Idle")));
+        _moveSequence = DOTween.Sequence();
+        _moveSequence.Append(transform.DOMoveX(_shootPosition.x, 2.5f))
+            .InsertCallback(2f, () => _animator.SetTrigger("Idle"))
+            .AppendCallback(() => onComplete?.Invoke(GameEnum.PrepareGameplayPoint.Animations));
     }
 
     private void OnEndRound(GameData gameData)

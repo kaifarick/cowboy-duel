@@ -31,7 +31,6 @@ public class GameView : MonoBehaviour
     private void Awake()
     {
         SetButtons();
-       
     }
 
     private void Start()
@@ -102,6 +101,11 @@ public class GameView : MonoBehaviour
         OnGameEndAction?.Invoke();
         _canvas.enabled = false;
         _timer.gameObject.SetActive(false);
+        
+        _gamePresenter.OnSelectionItemAction -= OnSelectionItem;
+        _gamePresenter.OnStartMoveTimerAction -= StartMoveTimer;
+        _gamePresenter.OnEndMoveTimerAction -= StopMoveTimer;
+        _gamePresenter.OnTimerTickAction -= OnTimerTick;   
     }
     
     

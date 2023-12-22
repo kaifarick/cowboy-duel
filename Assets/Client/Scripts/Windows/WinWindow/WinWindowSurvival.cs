@@ -25,7 +25,7 @@ public class WinWindowSurvival : AWinWindow
         
         _resumeButton.onClick.AddListener(() =>
         {
-            if(!gameData.RoundInfos[roundNum].WinnerPlayer.IsBot || roundResult == GameEnum.RoundResult.Draw) _gameManager.StartRound();
+            if(!gameData.RoundInfos[roundNum].WinnerPlayer.IsBot || roundResult == GameEnum.RoundResult.Draw) _gameManager.PrepareGameRound();
             else  _gameManager.GameEnd();;
         });
 

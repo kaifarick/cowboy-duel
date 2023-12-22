@@ -18,9 +18,9 @@ public abstract class AGameplay
     
     public event Action<GameData, GameEnum.RoundResult, int> OnEndRoundAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
-    public event Action OnPreRoundStartAction;
-    
-    
+    public event Action OnGameEndAction;
+
+
     public event Action OnStopMoveTimeAction;
     public event Action<int> OnStartMoveTimerAction;
     public event Action<int> OnTimerTickAction;
@@ -55,15 +55,12 @@ public abstract class AGameplay
         Debug.Log($"RoundResult{_roundResult} RoundNum{_roundNum}");
     }
 
-    public virtual void PreStartRound()
-    {
-        OnPreRoundStartAction?.Invoke();
-    }
-
 
     public virtual void EndGame()
     {
         _roundNum = 0;
+        
+        OnGameEndAction?.Invoke();
     }
     
     public virtual void SelectItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem = GameEnum.GameItem.None)

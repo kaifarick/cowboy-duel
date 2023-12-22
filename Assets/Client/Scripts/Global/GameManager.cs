@@ -1,5 +1,7 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -11,8 +13,16 @@ public class GameManager : MonoBehaviour
     public event Action OnGameEndAction;
     public event Action<GamePresenter> OnGameStartAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
-    
-        
+    public event Action<Action<GameEnum.PrepareGameplayPoint>> OnPrepareRoundAction;
+
+
+    private Dictionary<GameEnum.PrepareGameplayPoint, bool> _prepareGameplayPoints =
+        new Dictionary<GameEnum.PrepareGameplayPoint, bool>()
+        {
+            {GameEnum.PrepareGameplayPoint.Animations, false}
+        };
+
+
     [Inject] private WindowsManager _windowsManager;
 
 
@@ -22,26 +32,64 @@ public class GameManager : MonoBehaviour
         _gamePresenter = new GamePresenter(gameplay, this, _windowsManager);
         
         gameplay.OnRoundStartAction += OnRoundStart;
+        gameplay.OnGameEndAction += OnGameEnd;
+        gameplay.OnEndRoundAction += OnRoundEnd;
 
         OnGameStartAction?.Invoke(_gamePresenter);
         
-        StartRound();
+        PrepareGameRound();
+    }
+    
+    public void PrepareGameRound()
+    {
+        OnPrepareRoundAction?.Invoke(OnPrepareRound);
     }
 
-    public void StartRound()
+
+    public void GameEnd()
+    {
+        _gameplay.EndGame();
+    }
+    
+    private void StartRound()
     {
         _gameplay.StartRound();
     }
     
-    
-    public void GameEnd()
+    private void ResetData()
     {
-        _gameplay.EndGame();
-        OnGameEndAction?.Invoke();
-        
-        _gameplay.OnRoundStartAction -= OnRoundStart;
+        foreach (var point in _prepareGameplayPoints.Keys.ToList())
+        {
+            _prepareGameplayPoints[point] = false;
+        }
     }
 
+    private void OnPrepareRound(GameEnum.PrepareGameplayPoint prepareGameplayPoint)
+    {
+        if(_prepareGameplayPoints[prepareGameplayPoint]) return;
+        
+        _prepareGameplayPoints[prepareGameplayPoint] = true;
+        if (!_prepareGameplayPoints.ContainsValue(false))
+        {
+            StartRound();
+        }
+    }
+
+
+    private void OnGameEnd()
+    {
+        ResetData();
+        
+        _gameplay.OnRoundStartAction -= OnRoundStart;
+        _gameplay.OnGameEndAction -= OnGameEnd;
+        
+        OnGameEndAction?.Invoke();
+    }
+
+    private void OnRoundEnd(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
+    {
+        ResetData();
+    }
 
     private void OnRoundStart(GameEnum.GameplayType gameplayType)
     {

@@ -31,4 +31,9 @@ public class GameEnum : MonoBehaviour
         TwoPlayers
     }
     
+    public enum PrepareGameplayPoint
+    {
+        Animations
+    }
+    
 }

@@ -21,7 +21,7 @@ public class WinWindowChampionship : AWinWindow
 
         _resumeButton.onClick.AddListener(() =>
         {
-            if (roundNum < gameData.MaxRoundCount || roundResult == GameEnum.RoundResult.Draw) _gameManager.StartRound();
+            if (roundNum < gameData.MaxRoundCount || roundResult == GameEnum.RoundResult.Draw) _gameManager.PrepareGameRound();
             else _gameManager.GameEnd();;
         });
 
