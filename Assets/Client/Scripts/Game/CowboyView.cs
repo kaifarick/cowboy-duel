@@ -65,7 +65,7 @@ public class CowboyView : MonoBehaviour
 
         _animator.SetTrigger("Walk");
         _moveSequence = DOTween.Sequence();
-        _moveSequence.Append(transform.DOMoveX(_shootPosition.x, 2.5f))
+        _moveSequence.Append(transform.DOMoveX(_shootPosition.x, 2.5f).SetEase(Ease.Linear))
             .InsertCallback(2f, () => _animator.SetTrigger("Idle"))
             .AppendCallback(() => onComplete?.Invoke(GameEnum.PrepareGameplayPoint.Animations));
     }
@@ -110,6 +110,12 @@ public class CowboyView : MonoBehaviour
     {
         //call from from animation
         _revolverView.Hide();
+    }
+
+    private void SmokeAndExplosion()
+    {
+        //call from from animation
+        _revolverView.SmokeAndExplosion();
     }
 
 }

@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class RevolverView : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem _smoke;
+    [SerializeField] private ParticleSystem _explosion;
+    [SerializeField] private GameObject _view;
+    
     public void Show()
     {
-        gameObject.SetActive(true);
+        _view.SetActive(true);
     }
     
     public void Hide()
     {
-        gameObject.SetActive(false);
+        _view.SetActive(false);
+    }
+
+    public void SmokeAndExplosion()
+    {
+        _smoke.Play();
+        _explosion.Play();
     }
 }

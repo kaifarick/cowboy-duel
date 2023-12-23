@@ -2962,12 +2962,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5326692644605150279, guid: cbe2dafb723084862ada4780a860d7c2, type: 3}
+      propertyPath: InitialModule.startSpeed.maxCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5326692644605150279, guid: cbe2dafb723084862ada4780a860d7c2, type: 3}
+      propertyPath: InitialModule.startSpeed.maxCurve.m_Curve.Array.data[0].value
+      value: 0.8500004
+      objectReference: {fileID: 0}
     - target: {fileID: 6986796631303137984, guid: cbe2dafb723084862ada4780a860d7c2, type: 3}
       propertyPath: _playersNumber
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9041319039325715480, guid: cbe2dafb723084862ada4780a860d7c2, type: 3}
-      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
