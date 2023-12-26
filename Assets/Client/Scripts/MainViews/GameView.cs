@@ -13,11 +13,6 @@ public class GameView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _timer;
     [SerializeField] private List<SelectionButtonsGroup> _selectionButtonsGroup;
 
-    [Space]
-    [SerializeField] private CowboyView _playerOneCowboy;
-    [SerializeField] private CowboyView _playerTwoCowboy;
-
-
     [Inject] private GameManager _gameManager;
 
     public event Action<GameEnum.PlayersNumber> OnSelectionItemAction;
@@ -98,10 +93,11 @@ public class GameView : MonoBehaviour
     
     private void OnGameEnd()
     {
-        OnGameEndAction?.Invoke();
         _canvas.enabled = false;
         _timer.gameObject.SetActive(false);
         
+        OnGameEndAction?.Invoke();
+
         _gamePresenter.OnSelectionItemAction -= OnSelectionItem;
         _gamePresenter.OnStartMoveTimerAction -= StartMoveTimer;
         _gamePresenter.OnEndMoveTimerAction -= StopMoveTimer;
