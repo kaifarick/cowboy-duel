@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +7,9 @@ using Zenject;
 public class GameManager : MonoBehaviour
 {
     private AGameplay _gameplay;
-    private GamePresenter _gamePresenter;
-    
+
     public event Action OnGameEndAction;
-    public event Action<GamePresenter> OnGameStartAction;
+    public event Action OnGameStartAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
     public event Action<Action<GameEnum.PrepareGameplayPoint>> OnPrepareRoundAction;
 
@@ -21,21 +19,20 @@ public class GameManager : MonoBehaviour
         {
             {GameEnum.PrepareGameplayPoint.Animations, false}
         };
-
-
-    [Inject] private WindowsManager _windowsManager;
+    
+    [Inject] private GamePresenter _gamePresenter;
 
 
     public void StartGame(AGameplay gameplay)
     {
         _gameplay = gameplay;
-        _gamePresenter = new GamePresenter(gameplay, this, _windowsManager);
+        _gamePresenter.InitializeGameplay(gameplay);
         
         gameplay.OnRoundStartAction += OnRoundStart;
         gameplay.OnGameEndAction += OnGameEnd;
         gameplay.OnEndRoundAction += OnRoundEnd;
 
-        OnGameStartAction?.Invoke(_gamePresenter);
+        OnGameStartAction?.Invoke();
         
         PrepareGameRound();
     }

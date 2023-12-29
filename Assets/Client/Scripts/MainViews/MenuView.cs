@@ -32,7 +32,7 @@ public class MenuView : MonoBehaviour
         _gameManager.OnGameEndAction += OnEndGame;
     }
 
-    private void OnStartGame(GamePresenter gamePresenter)
+    private void OnStartGame()
     {
         _canvas.enabled = false;
     }

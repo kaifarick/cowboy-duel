@@ -10,10 +10,11 @@ public class CowboyView : MonoBehaviour
     [SerializeField] private GameEnum.PlayersNumber _playersNumber;
 
     [Inject] private GameManager _gameManager;
-    [Inject] private MainCamera _mainCamera;
-
-    private GamePresenter _gamePresenter;
+    [Inject] private CameraManager _cameraManager;
+    [Inject] private GamePresenter _gamePresenter;
+    
     private Sequence _moveSequence;
+    private Sequence _shootSequence;
 
     private Vector3 _startPosition;
     private Vector3 _shootPosition;
@@ -21,49 +22,39 @@ public class CowboyView : MonoBehaviour
 
     private void Start()
     {
-        _gameManager.OnGameStartAction += OnGameStart;
         _gameManager.OnGameEndAction += OnGameEnd;
+        
+        _gamePresenter.OnEndRoundAction += OnEndRound;
+        _gamePresenter.OnPrepareRoundAction += OnPrepareRound;
 
 
         var preSpace = 500;
         _startPosition = _playersNumber == GameEnum.PlayersNumber.PlayerOne
-            ? _mainCamera.GetLeftPointWithSpace(-preSpace)
-            : _mainCamera.GetRightPointWithSpace(-preSpace);
+            ? _cameraManager.GetLeftPointWithSpace(-preSpace)
+            : _cameraManager.GetRightPointWithSpace(-preSpace);
         
         
         var screenSpace = 300;
         _shootPosition = _playersNumber == GameEnum.PlayersNumber.PlayerOne
-            ? _mainCamera.GetLeftPointWithSpace(screenSpace)
-            : _mainCamera.GetRightPointWithSpace(screenSpace);
+            ? _cameraManager.GetLeftPointWithSpace(screenSpace)
+            : _cameraManager.GetRightPointWithSpace(screenSpace);
     }
-
-    private void OnGameStart(GamePresenter gamePresenter)
-    {
-        _gamePresenter = gamePresenter;
-
-        _gamePresenter.OnEndRoundAction += OnEndRound;
-        _gamePresenter.OnPrepareRoundAction += OnPrepareRound;
-    }
+    
 
     private void OnGameEnd()
     {
         _moveSequence.Kill();
-        Debug.Log("sequKILL");
-        
+        _shootSequence.Kill();
+
         transform.position = new Vector3(_startPosition.x, transform.position.y, transform.position.z);
         
-        _gamePresenter.OnEndRoundAction -= OnEndRound;
-        _gamePresenter.OnPrepareRoundAction -= OnPrepareRound;
     }
 
     private void OnPrepareRound(Action<GameEnum.PrepareGameplayPoint> onComplete)
     {
-        
-        Debug.Log("prepare");
         transform.position = new Vector3(_startPosition.x, transform.position.y, transform.position.z);
-        
-
         _animator.SetTrigger("Walk");
+        
         _moveSequence = DOTween.Sequence();
         _moveSequence.Append(transform.DOMoveX(_shootPosition.x, 2.5f).SetEase(Ease.Linear))
             .InsertCallback(2f, () => _animator.SetTrigger("Idle"))
@@ -72,7 +63,6 @@ public class CowboyView : MonoBehaviour
 
     private void OnEndRound(GameData gameData)
     {
-        
         if (_playersNumber == gameData.RoundInfos[gameData.CurrentRound].WinnerPlayer.PlayersNumber ||
             gameData.RoundInfos[gameData.CurrentRound].WinnerPlayer.PlayersNumber == GameEnum.PlayersNumber.None)
         {
@@ -81,10 +71,10 @@ public class CowboyView : MonoBehaviour
 
         else
         {
-            float shotWaitTime = 0.4f;
+            float shootWaitTime = 0.4f;
             
-            Sequence sequence = DOTween.Sequence();
-            sequence.AppendInterval(shotWaitTime).AppendCallback(Death);
+            _shootSequence = DOTween.Sequence();
+            _shootSequence.AppendInterval(shootWaitTime).AppendCallback(Death);
         }
     }
 

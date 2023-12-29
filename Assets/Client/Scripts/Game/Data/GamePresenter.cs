@@ -1,11 +1,13 @@
 using System;
 using DG.Tweening;
+using Zenject;
 
-public class GamePresenter
+public class GamePresenter :  IInitializable
 {
     public event Action<GameEnum.PlayersNumber,GameEnum.GameItem> OnSelectionItemAction;
     public event Action<GameData> OnEndRoundAction;
     public event Action<Action<GameEnum.PrepareGameplayPoint>> OnPrepareRoundAction;
+    public event Action OnEndGameAction; 
     
     
     public event Action<int> OnStartMoveTimerAction;
@@ -13,20 +15,22 @@ public class GamePresenter
     public event Action  OnEndMoveTimerAction;
     
     private AGameplay _gameplay;
-    private GameManager _gameManager;
-    private WindowsManager _windowsManager;
+    private Sequence _endRoundSequence;
+
+    [Inject] private GameManager _gameManager;
+    [Inject] private WindowsManager _windowsManager;
+
     
-    
-    public GamePresenter(AGameplay aGameplay, GameManager gameManager, WindowsManager windowsManager)
+    public void Initialize()
+    {
+        _gameManager.OnGameStartAction += OnStartGame;
+        _gameManager.OnGameEndAction += OnGameEnd;
+        _gameManager.OnPrepareRoundAction += OnPrepareRound;
+    }
+
+    public void InitializeGameplay(AGameplay aGameplay)
     {
         _gameplay = aGameplay;
-        _gameManager = gameManager;
-        _windowsManager = windowsManager;
-        
-
-        gameManager.OnGameStartAction += OnStartGame;
-        gameManager.OnGameEndAction += OnGameEnd;
-        gameManager.OnPrepareRoundAction += OnPrepareRound;
     }
 
     public void SelectedItemClick(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem)
@@ -35,7 +39,7 @@ public class GamePresenter
     }
     
 
-    private void OnStartGame(GamePresenter gamePresenter)
+    private void OnStartGame()
     {
         _gameplay.OnStartMoveTimerAction += OnStartMoveTimer;
         _gameplay.OnStopMoveTimeAction += OnStopMoveTimer;
@@ -46,11 +50,15 @@ public class GamePresenter
 
     private void OnGameEnd()
     {
+        _endRoundSequence.Kill();
+        OnEndGameAction?.Invoke();
+        
         _gameplay.OnStartMoveTimerAction -= OnStartMoveTimer;
         _gameplay.OnStopMoveTimeAction -= OnStopMoveTimer;
         _gameplay.OnTimerTickAction -= OnTimerTick;
         _gameplay.OnSelectedItemAction -= OnSelectedItem;
         _gameplay.OnEndRoundAction -= OnEndRound;
+        
     }
     
     private void OnSelectedItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem = GameEnum.GameItem.None)
@@ -63,8 +71,8 @@ public class GamePresenter
         OnEndRoundAction?.Invoke(gameData);
 
         int winWindowDelay = 4;
-        Sequence sequence = DOTween.Sequence();
-        sequence.AppendInterval(winWindowDelay).AppendCallback((() => ShowWinWindow(gameData,roundResult,roundNum)));
+        _endRoundSequence = DOTween.Sequence();
+        _endRoundSequence.AppendInterval(winWindowDelay).AppendCallback(() => ShowWinWindow(gameData,roundResult,roundNum));
 
     }
     
@@ -104,5 +112,4 @@ public class GamePresenter
     }
     
     #endregion
-
 }

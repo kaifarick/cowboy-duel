@@ -14,14 +14,12 @@ public class GameView : MonoBehaviour
     [SerializeField] private List<SelectionButtonsGroup> _selectionButtonsGroup;
 
     [Inject] private GameManager _gameManager;
+    [Inject] private GamePresenter _gamePresenter;
 
     public event Action<GameEnum.PlayersNumber> OnSelectionItemAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
     public event Action OnGameEndAction;
-    
 
-    private GamePresenter _gamePresenter;
-    
 
     private void Awake()
     {
@@ -33,6 +31,11 @@ public class GameView : MonoBehaviour
         _gameManager.OnGameEndAction += OnGameEnd;
         _gameManager.OnGameStartAction += OnStartGame;
         _gameManager.OnRoundStartAction += OnRoundStart;
+        
+        _gamePresenter.OnSelectionItemAction += OnSelectionItem;
+        _gamePresenter.OnStartMoveTimerAction += StartMoveTimer;
+        _gamePresenter.OnEndMoveTimerAction += StopMoveTimer;
+        _gamePresenter.OnTimerTickAction += OnTimerTick;  
 
     }
     
@@ -52,16 +55,9 @@ public class GameView : MonoBehaviour
     }
     
 
-    private void OnStartGame(GamePresenter gamePresenter)
+    private void OnStartGame()
     {
-        gamePresenter.OnSelectionItemAction += OnSelectionItem;
-        gamePresenter.OnStartMoveTimerAction += StartMoveTimer;
-        gamePresenter.OnEndMoveTimerAction += StopMoveTimer;
-        gamePresenter.OnTimerTickAction += OnTimerTick;   
-        
-        
         _canvas.enabled = true;
-        _gamePresenter = gamePresenter;
     }
     
 
@@ -97,12 +93,5 @@ public class GameView : MonoBehaviour
         _timer.gameObject.SetActive(false);
         
         OnGameEndAction?.Invoke();
-
-        _gamePresenter.OnSelectionItemAction -= OnSelectionItem;
-        _gamePresenter.OnStartMoveTimerAction -= StartMoveTimer;
-        _gamePresenter.OnEndMoveTimerAction -= StopMoveTimer;
-        _gamePresenter.OnTimerTickAction -= OnTimerTick;   
     }
-    
-    
 }
