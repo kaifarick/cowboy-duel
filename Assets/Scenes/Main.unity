@@ -2561,7 +2561,7 @@ MonoBehaviour:
   _windowsManager: {fileID: 2106813064}
   _gameManager: {fileID: 1136820445}
   _audioManager: {fileID: 1351428348}
-  _mainCamera: {fileID: 519420033}
+  cameraManager: {fileID: 519420033}
 --- !u!114 &1869187905
 MonoBehaviour:
   m_ObjectHideFlags: 0

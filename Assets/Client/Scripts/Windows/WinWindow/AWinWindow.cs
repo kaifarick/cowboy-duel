@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 
@@ -13,6 +9,7 @@ public abstract class AWinWindow : BaseWindow
     [SerializeField] protected TextMeshProUGUI _winPlayerTxt;
     [SerializeField] protected TextMeshProUGUI _playerOneItemTxt;
     [SerializeField] protected TextMeshProUGUI _playerTwoItemTxt;
+    
     [SerializeField] protected Button _resumeButton;
 
     [Inject] protected GameManager _gameManager;
@@ -23,8 +20,8 @@ public abstract class AWinWindow : BaseWindow
         string winTxt = roundResult == GameEnum.RoundResult.Draw ? roundResult.ToString() : $"{gameData.RoundInfos[roundNum].WinnerPlayer.Name} win!";
         _winPlayerTxt.text = winTxt;
         
-        _playerOneItemTxt.text = $"{gameData.RoundInfos[roundNum].FirstPlayer.Name} {gameData.RoundInfos[roundNum].FirstPlayer.GameItem}";
-        _playerTwoItemTxt.text = $"{gameData.RoundInfos[roundNum].SecondPlayer.Name} {gameData.RoundInfos[roundNum].SecondPlayer.GameItem}";
+        _playerOneItemTxt.text = $"{gameData.RoundInfos[roundNum].FirstPlayer.Name}: {gameData.RoundInfos[roundNum].FirstPlayer.GameItem}";
+        _playerTwoItemTxt.text = $"{gameData.RoundInfos[roundNum].SecondPlayer.Name}: {gameData.RoundInfos[roundNum].SecondPlayer.GameItem}";
         
         _resumeButton.onClick.AddListener(Hide);
         
