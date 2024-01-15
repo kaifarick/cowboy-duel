@@ -8,7 +8,6 @@ public class BotPlayer: APlayer
     {
         Name = _names[Random.Range(0, _names.Length)];
         PlayersNumber = playersNumber;
-        
-        SelectItem(GameEnum.GameItem.None);
+        IsBot = true;
     }
 }

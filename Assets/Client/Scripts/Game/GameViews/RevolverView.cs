@@ -37,6 +37,8 @@ public class RevolverView : MonoBehaviour
     {
         _smoke.Stop();
         _smoke.Clear();
-        Debug.Log("StopSmoke");
+        
+        _explosion.Stop();
+        _explosion.Clear();
     }
 }

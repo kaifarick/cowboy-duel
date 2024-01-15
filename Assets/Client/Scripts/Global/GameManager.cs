@@ -10,8 +10,10 @@ public class GameManager : MonoBehaviour
 
     public event Action OnGameEndAction;
     public event Action OnGameStartAction;
-    public event Action<GameEnum.GameplayType> OnRoundStartAction;
-    public event Action<Action<GameEnum.PrepareGameplayPoint>> OnPrepareRoundAction;
+    
+    
+    public event Action<Action<GameEnum.PrepareGameplayPoint>> OnCheckPreparePointsAction;
+    
 
 
     private Dictionary<GameEnum.PrepareGameplayPoint, bool> _prepareGameplayPoints =
@@ -23,73 +25,85 @@ public class GameManager : MonoBehaviour
     [Inject] private GamePresenter _gamePresenter;
 
 
+    #region public
+    
     public void StartGame(AGameplay gameplay)
     {
         _gameplay = gameplay;
         _gamePresenter.InitializeGameplay(gameplay);
         
-        gameplay.OnRoundStartAction += OnRoundStart;
+        gameplay.OnGameStartAction += OnGameStart;
         gameplay.OnGameEndAction += OnGameEnd;
-        gameplay.OnEndRoundAction += OnRoundEnd;
-
-        OnGameStartAction?.Invoke();
         
-        PrepareGameRound();
+        gameplay.OnPrepareRoundAction += OnPrepareRound;
+
+        _gameplay.StartGame();
+        
     }
     
+
     public void PrepareGameRound()
     {
-        OnPrepareRoundAction?.Invoke(OnPrepareRound);
+        _gameplay.PrepareGameRound();
     }
-
 
     public void GameEnd()
     {
         _gameplay.EndGame();
     }
     
-    private void StartRound()
+    #endregion
+    
+    
+    #region private
+    
+
+
+    private void CheckPreparePoints(GameEnum.PrepareGameplayPoint prepareGameplayPoint)
     {
-        _gameplay.StartRound();
+        //if already ready
+        if(_prepareGameplayPoints[prepareGameplayPoint]) return;
+        
+        _prepareGameplayPoints[prepareGameplayPoint] = true;
+        if (!_prepareGameplayPoints.ContainsValue(false))
+        {
+            _gameplay.StartRound();
+        }
     }
     
-    private void ResetData()
+    private void ResetPrepareData()
     {
         foreach (var point in _prepareGameplayPoints.Keys.ToList())
         {
             _prepareGameplayPoints[point] = false;
         }
     }
-
-    private void OnPrepareRound(GameEnum.PrepareGameplayPoint prepareGameplayPoint)
+    
+    private void OnGameStart()
     {
-        if(_prepareGameplayPoints[prepareGameplayPoint]) return;
+        OnGameStartAction?.Invoke();
         
-        _prepareGameplayPoints[prepareGameplayPoint] = true;
-        if (!_prepareGameplayPoints.ContainsValue(false))
-        {
-            StartRound();
-        }
+        PrepareGameRound();
     }
 
 
     private void OnGameEnd()
     {
-        ResetData();
+        ResetPrepareData();
         
-        _gameplay.OnRoundStartAction -= OnRoundStart;
         _gameplay.OnGameEndAction -= OnGameEnd;
+        _gameplay.OnPrepareRoundAction -= OnPrepareRound;
+        _gameplay.OnGameStartAction -= OnGameStart;
         
         OnGameEndAction?.Invoke();
     }
+    
 
-    private void OnRoundEnd(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
+    private void OnPrepareRound(GameData gameData)
     {
-        ResetData();
+        ResetPrepareData();
+        OnCheckPreparePointsAction?.Invoke(CheckPreparePoints);
     }
-
-    private void OnRoundStart(GameEnum.GameplayType gameplayType)
-    {
-        OnRoundStartAction?.Invoke(gameplayType);
-    }
+    
+    #endregion
 }

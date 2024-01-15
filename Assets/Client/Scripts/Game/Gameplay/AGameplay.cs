@@ -14,11 +14,27 @@ public abstract class AGameplay
     
     protected int _roundTimeLeft;
     protected int _roundNum;
+
+    protected IPlayerDamager _iPlayerDamager;
     
     
     public event Action<GameData, GameEnum.RoundResult, int> OnEndRoundAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
+    
+    
+    public event Action OnNextRoundStepAction;
+    public event Action OnEndRoundStepAction;
+    
+    
     public event Action OnGameEndAction;
+    public event Action OnGameStartAction;
+
+
+
+    public event Action<GameEnum.PlayersNumber, int> OnGetHitAction;
+    public event Action<GameEnum.PlayersNumber, GameEnum.GameItem> OnSelectedItemAction;
+    public event Action<GameData> OnPrepareRoundAction;
+
 
 
     public event Action OnStopMoveTimeAction;
@@ -26,17 +42,29 @@ public abstract class AGameplay
     public event Action<int> OnTimerTickAction;
 
     
-    public event Action<GameEnum.PlayersNumber, GameEnum.GameItem> OnSelectedItemAction;
 
     protected AGameplay(GameEnum.GameplayType gameplayType)
     {
         GameplayType = gameplayType;
         
         GameData = new GameData(){RoundInfos = new Dictionary<int, GameData.RoundInfo>()};
+#if DEBUG_LOGIC
+        _iPlayerDamager = new DebugPlayerDamager();
+#else
+        _iPlayerDamager = new StandartDamager();
+#endif
     }
+    
 
 
     public virtual void StartRound()
+    {
+        OnRoundStartAction?.Invoke(GameplayType);
+        
+        Debug.Log($"RoundResult{_roundResult} RoundNum{_roundNum}");
+    }
+
+    public virtual void PrepareGameRound()
     {
         if(_roundResult != GameEnum.RoundResult.Draw) _roundNum++;
         if(!GameData.RoundInfos.ContainsKey(_roundNum)) GameData.RoundInfos.Add(_roundNum, new GameData.RoundInfo()
@@ -45,14 +73,16 @@ public abstract class AGameplay
             SecondPlayer = new GameData.PlayerInfo(),
             WinnerPlayer = new GameData.PlayerInfo()
         });
+        
 
         PlayersWin = null;
-
         GameData.CurrentRound = _roundNum;
         
-        OnRoundStartAction?.Invoke(GameplayType);
-        
-        Debug.Log($"RoundResult{_roundResult} RoundNum{_roundNum}");
+    }
+
+    public virtual void StartGame()
+    {
+        OnGameStartAction?.Invoke();
     }
 
 
@@ -68,20 +98,89 @@ public abstract class AGameplay
         if (playersNumber == GameEnum.PlayersNumber.PlayerOne)
         {
             FirstPlayer?.SelectItem(gameItem);
+
             GameData.RoundInfos[_roundNum].FirstPlayer.GameItem = FirstPlayer.GameItem;
         }
 
         if (playersNumber == GameEnum.PlayersNumber.PlayerTwo)
         {
             SecondPlayer?.SelectItem(gameItem);
+
             GameData.RoundInfos[_roundNum].SecondPlayer.GameItem = SecondPlayer.GameItem;
         }
-        
+
         OnSelectedItemAction?.Invoke(playersNumber,gameItem);
-        
-        if(FirstPlayer?.GameItem != GameEnum.GameItem.None && SecondPlayer?.GameItem != GameEnum.GameItem.None) CheckRoundResult();
+
+
+        if (FirstPlayer?.GameItem != GameEnum.GameItem.None && SecondPlayer?.GameItem != GameEnum.GameItem.None)
+        {
+            
+            SetPlayerDamage();
+            EndRoundStep();
+        }
+
     }
-    
+
+    public void DebugWinRound(GameEnum.PlayersNumber winPlayer)
+    {
+        if (winPlayer == GameEnum.PlayersNumber.PlayerOne)
+        {
+            FirstPlayer?.SelectItem(GameEnum.GameItem.Rock);
+            SecondPlayer?.SelectItem(GameEnum.GameItem.Scissors);
+        }
+
+        else
+        {
+            FirstPlayer?.SelectItem(GameEnum.GameItem.Scissors);
+            SecondPlayer?.SelectItem(GameEnum.GameItem.Rock);
+        }
+
+        GameData.RoundInfos[_roundNum].FirstPlayer.GameItem = FirstPlayer.GameItem;
+        GameData.RoundInfos[_roundNum].SecondPlayer.GameItem = SecondPlayer.GameItem;
+        
+        OnSelectedItemAction?.Invoke(FirstPlayer.PlayersNumber,FirstPlayer.GameItem);
+        OnSelectedItemAction?.Invoke(SecondPlayer.PlayersNumber,SecondPlayer.GameItem);
+        
+        SetPlayerDamage(true);
+        EndRoundStep();
+    }
+
+    public virtual void NextRoundStep()
+    {
+        FirstPlayer.ResetData();
+        SecondPlayer.ResetData();
+        
+        OnNextRoundStepAction?.Invoke();
+    }
+
+#region Protected
+
+    protected virtual void EndRoundStep()
+    {
+        OnEndRoundStepAction?.Invoke();
+
+        var hitterPlayer = _iPlayerDamager.GetHittingPlayer(FirstPlayer,SecondPlayer);
+        var strikingPlayer = _iPlayerDamager.GetStrikingPlayer(FirstPlayer, SecondPlayer);
+        
+        if (hitterPlayer != null && hitterPlayer.Health <= 0)
+        {
+            PlayersWin = strikingPlayer;
+
+            GameData.RoundInfos[_roundNum].WinnerPlayer.Name = strikingPlayer.Name;
+            GameData.RoundInfos[_roundNum].WinnerPlayer.GameItem = strikingPlayer.GameItem;
+            GameData.RoundInfos[_roundNum].WinnerPlayer.PlayersNumber = strikingPlayer.PlayersNumber;
+
+            if (strikingPlayer.IsBot)
+            {
+                _roundResult = GameEnum.RoundResult.BotWin;
+                GameData.RoundInfos[_roundNum].WinnerPlayer.IsBot = true;
+            }
+            else if (!strikingPlayer.IsBot) _roundResult = GameEnum.RoundResult.PlayerWin;
+
+            EndRound();
+        }
+    }
+
     protected virtual void EndRound()
     {
         OnEndRoundAction?.Invoke(GameData, _roundResult, _roundNum);
@@ -104,71 +203,32 @@ public abstract class AGameplay
         OnStartMoveTimerAction?.Invoke(time);
     }
 
-    private void CheckRoundResult()
+    protected void CallPrepareRoundAction(GameData gameData)
     {
-        if (FirstPlayer.GameItem == GameEnum.GameItem.Rock)
+        OnPrepareRoundAction?.Invoke(gameData);
+    }
+
+    protected void SetPlayerDamage(bool isDebug = false)
+    {
+        var hitterPlayer = _iPlayerDamager.GetHittingPlayer(FirstPlayer,SecondPlayer);
+        var strikingPlayer = _iPlayerDamager.GetStrikingPlayer(FirstPlayer, SecondPlayer);
+
+        if (hitterPlayer == null)
         {
-            switch (SecondPlayer.GameItem)
-            {
-                case GameEnum.GameItem.Rock:
-                    _roundResult = GameEnum.RoundResult.Draw;
-                    break;
-                case GameEnum.GameItem.Paper:
-                    PlayersWin = SecondPlayer;
-                    break;
-                case GameEnum.GameItem.Scissors:
-                    PlayersWin = FirstPlayer;
-                    break;
-            }
+            //if result draw
+            OnGetHitAction?.Invoke(GameEnum.PlayersNumber.None, 0);
+            return;
         }
 
-        if (FirstPlayer?.GameItem == GameEnum.GameItem.Paper)
+        else
         {
-            switch (SecondPlayer.GameItem)
-            {
-                case GameEnum.GameItem.Rock:
-                    PlayersWin = FirstPlayer;
-                    break;
-                case GameEnum.GameItem.Paper:
-                    _roundResult = GameEnum.RoundResult.Draw;
-                    break;
-                case GameEnum.GameItem.Scissors:
-                    PlayersWin = SecondPlayer;
-                    break;
-            }
+            if (!isDebug) hitterPlayer.GetDamage(strikingPlayer.SelectionItemsСharacteristic.DamageValue[strikingPlayer.GameItem]);
+            else hitterPlayer.GetDamage(100);
+            
+            OnGetHitAction?.Invoke(hitterPlayer.PlayersNumber,hitterPlayer.Health);
+            
         }
-        
-        if (FirstPlayer.GameItem == GameEnum.GameItem.Scissors)
-        {
-            switch (SecondPlayer?.GameItem)
-            {
-                case GameEnum.GameItem.Rock:
-                    PlayersWin = SecondPlayer;
-                    break;
-                case GameEnum.GameItem.Paper:
-                    PlayersWin = FirstPlayer;
-                    break;
-                case GameEnum.GameItem.Scissors:
-                    _roundResult = GameEnum.RoundResult.Draw;
-                    break;
-            }
-        }
-
-        if (PlayersWin != null)
-        {
-            GameData.RoundInfos[_roundNum].WinnerPlayer.Name = PlayersWin.Name;
-            GameData.RoundInfos[_roundNum].WinnerPlayer.GameItem = PlayersWin.GameItem;
-            GameData.RoundInfos[_roundNum].WinnerPlayer.PlayersNumber = PlayersWin.PlayersNumber;
-
-            if (PlayersWin is BotPlayer)
-            {
-                _roundResult = GameEnum.RoundResult.BotWin;
-                GameData.RoundInfos[_roundNum].WinnerPlayer.IsBot = true;
-            }
-            else if (PlayersWin is Player) _roundResult = GameEnum.RoundResult.PlayerWin;
-        }
-
-        EndRound();
     }
     
+    #endregion
 }

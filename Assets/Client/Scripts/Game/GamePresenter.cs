@@ -5,17 +5,32 @@ using Zenject;
 public class GamePresenter :  IInitializable
 {
     public event Action<GameEnum.PlayersNumber,GameEnum.GameItem> OnSelectionItemAction;
+    public event Action<Action<GameEnum.PrepareGameplayPoint>> OnCheckPreparePointsAction;
+    public event Action <GameEnum.PlayersNumber,int> OnHitPlayerAction;
+    
+    
+    public event Action OnEndGameAction;
+    public event Action OnGameStartAction;
+    
+    
+    public event Action OnNextRoundStepAction;
+    public event Action OnEndRoundStepAction;
+
+
+    public event Action<GameEnum.GameplayType> OnStartRoundAction;
     public event Action<GameData> OnEndRoundAction;
-    public event Action<Action<GameEnum.PrepareGameplayPoint>> OnPrepareRoundAction;
-    public event Action OnEndGameAction; 
-    
-    
+    public event Action<GameData> OnPrepareRoundAction;
+
+
     public event Action<int> OnStartMoveTimerAction;
     public event Action<int> OnTimerTickAction;
     public event Action  OnEndMoveTimerAction;
     
+    
     private AGameplay _gameplay;
+    
     private Sequence _endRoundSequence;
+    private Sequence _hitPlayerSequence;
 
     [Inject] private GameManager _gameManager;
     [Inject] private WindowsManager _windowsManager;
@@ -23,30 +38,53 @@ public class GamePresenter :  IInitializable
     
     public void Initialize()
     {
-        _gameManager.OnGameStartAction += OnStartGame;
-        _gameManager.OnGameEndAction += OnGameEnd;
-        _gameManager.OnPrepareRoundAction += OnPrepareRound;
+        _gameManager.OnCheckPreparePointsAction += OnCheckPreparePoints;
     }
+
 
     public void InitializeGameplay(AGameplay aGameplay)
     {
         _gameplay = aGameplay;
+        _gameplay.OnGameStartAction += OnStartGame;
     }
 
     public void SelectedItemClick(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem)
     {
         _gameplay.SelectItem(playersNumber, gameItem);
     }
-    
+
+    public void DebugWinRound(GameEnum.PlayersNumber playersNumber)
+    {
+        _gameplay.DebugWinRound(playersNumber);
+    }
+
+    private void NextRoundStep()
+    {
+        _gameplay.NextRoundStep();
+    }
 
     private void OnStartGame()
     {
         _gameplay.OnStartMoveTimerAction += OnStartMoveTimer;
         _gameplay.OnStopMoveTimeAction += OnStopMoveTimer;
         _gameplay.OnTimerTickAction += OnTimerTick;
-        _gameplay.OnSelectedItemAction += OnSelectedItem;
+        
+        _gameplay.OnNextRoundStepAction += OnNextRoundStep;
+        _gameplay.OnEndRoundStepAction += OnEndRoundStep;
+        
         _gameplay.OnEndRoundAction += OnEndRound;
+        _gameplay.OnRoundStartAction += OnRoundStart;
+        _gameplay.OnPrepareRoundAction += OnPrepareRound;
+        
+        _gameplay.OnSelectedItemAction += OnSelectedItem;
+        _gameplay.OnGetHitAction += OnHitPlayer;
+        _gameplay.OnGameEndAction += OnGameEnd;
+
+        OnGameStartAction?.Invoke();
+
     }
+    
+
 
     private void OnGameEnd()
     {
@@ -56,31 +94,74 @@ public class GamePresenter :  IInitializable
         _gameplay.OnStartMoveTimerAction -= OnStartMoveTimer;
         _gameplay.OnStopMoveTimeAction -= OnStopMoveTimer;
         _gameplay.OnTimerTickAction -= OnTimerTick;
-        _gameplay.OnSelectedItemAction -= OnSelectedItem;
-        _gameplay.OnEndRoundAction -= OnEndRound;
         
+        _gameplay.OnNextRoundStepAction -= OnNextRoundStep;
+        _gameplay.OnEndRoundStepAction -= OnEndRoundStep;
+        
+        _gameplay.OnGameEndAction -= OnGameEnd;
+        _gameplay.OnGameStartAction -= OnStartGame;
+        
+        _gameplay.OnSelectedItemAction -= OnSelectedItem;
+        _gameplay.OnGetHitAction -= OnHitPlayer;
+        
+        _gameplay.OnEndRoundAction -= OnEndRound;
+        _gameplay.OnRoundStartAction -= OnRoundStart;
+        _gameplay.OnPrepareRoundAction -= OnPrepareRound;
+
+    }
+    
+    private void OnEndRoundStep()
+    {
+        OnEndRoundStepAction?.Invoke();
+    }
+    
+    private void OnRoundStart(GameEnum.GameplayType gameplayType)
+    {
+        OnStartRoundAction?.Invoke(gameplayType);
+    }
+    
+    private void OnPrepareRound(GameData gameData)
+    {
+        OnPrepareRoundAction?.Invoke(gameData);
     }
     
     private void OnSelectedItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem = GameEnum.GameItem.None)
     {
         OnSelectionItemAction?.Invoke(playersNumber,gameItem);
     }
-
+    
+    private void OnNextRoundStep()
+    {
+        OnNextRoundStepAction?.Invoke();
+    }
+    
+    
+    private void OnCheckPreparePoints(Action<GameEnum.PrepareGameplayPoint> onComplete)
+    {
+        OnCheckPreparePointsAction?.Invoke((point => onComplete?.Invoke(point)));
+    }
+    
     private void OnEndRound(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
     {
         OnEndRoundAction?.Invoke(gameData);
 
-        int winWindowDelay = 4;
+        int winWindowDelay = 3;
         _endRoundSequence = DOTween.Sequence();
         _endRoundSequence.AppendInterval(winWindowDelay).AppendCallback(() => ShowWinWindow(gameData,roundResult,roundNum));
 
     }
-    
-    private void OnPrepareRound(Action<GameEnum.PrepareGameplayPoint> onComplete)
-    {
-        OnPrepareRoundAction?.Invoke((point => onComplete?.Invoke(point)));
-    }
 
+    private void OnHitPlayer(GameEnum.PlayersNumber playersNumber, int health)
+    {
+        OnHitPlayerAction?.Invoke(playersNumber,health);
+        
+        if(playersNumber != GameEnum.PlayersNumber.None && health <= 0) return;
+        
+        float waitTime = 4;
+        _hitPlayerSequence = DOTween.Sequence();
+        _hitPlayerSequence.AppendInterval(waitTime).AppendCallback(NextRoundStep);
+    }
+    
     private void ShowWinWindow(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
     {
         AWinWindow winWindow = null;
@@ -91,8 +172,8 @@ public class GamePresenter :  IInitializable
         
         winWindow.Initialize(gameData, roundResult, roundNum);
     }
-
-
+    
+    
 
     #region Timer
 

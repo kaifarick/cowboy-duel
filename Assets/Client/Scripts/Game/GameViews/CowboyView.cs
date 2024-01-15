@@ -8,13 +8,12 @@ public class CowboyView : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private RevolverView _revolverView;
     [SerializeField] private GameEnum.PlayersNumber _playersNumber;
-
-    [Inject] private GameManager _gameManager;
+    
     [Inject] private CameraManager _cameraManager;
     [Inject] private GamePresenter _gamePresenter;
     
     private Sequence _moveSequence;
-    private Sequence _shootSequence;
+    private Sequence _hitSequence;
 
     private Vector3 _startPosition;
     private Vector3 _shootPosition;
@@ -22,10 +21,11 @@ public class CowboyView : MonoBehaviour
 
     private void Start()
     {
-        _gameManager.OnGameEndAction += OnGameEnd;
+        _gamePresenter.OnEndGameAction += OnGameEnd;
         
         _gamePresenter.OnEndRoundAction += OnEndRound;
-        _gamePresenter.OnPrepareRoundAction += OnPrepareRound;
+        _gamePresenter.OnCheckPreparePointsAction += OnCheckPreparePoints;
+        _gamePresenter.OnHitPlayerAction += OnHitPlayer;
 
 
         var preSpace = 500;
@@ -44,13 +44,13 @@ public class CowboyView : MonoBehaviour
     private void OnGameEnd()
     {
         _moveSequence.Kill();
-        _shootSequence.Kill();
+        _hitSequence.Kill();
 
         transform.position = new Vector3(_startPosition.x, transform.position.y, transform.position.z);
         
     }
 
-    private void OnPrepareRound(Action<GameEnum.PrepareGameplayPoint> onComplete)
+    private void OnCheckPreparePoints(Action<GameEnum.PrepareGameplayPoint> onComplete)
     {
         transform.position = new Vector3(_startPosition.x, transform.position.y, transform.position.z);
         _animator.SetTrigger("Walk");
@@ -63,18 +63,28 @@ public class CowboyView : MonoBehaviour
 
     private void OnEndRound(GameData gameData)
     {
-        if (_playersNumber == gameData.RoundInfos[gameData.CurrentRound].WinnerPlayer.PlayersNumber ||
-            gameData.RoundInfos[gameData.CurrentRound].WinnerPlayer.PlayersNumber == GameEnum.PlayersNumber.None)
+        
+    }
+    
+    private void OnHitPlayer(GameEnum.PlayersNumber playersNumber, int health)
+    {
+        if (playersNumber == GameEnum.PlayersNumber.None || playersNumber != _playersNumber)
         {
             Shot();
+            return;
         }
 
+        if (health > 0)
+        {
+            float shootWaitTime = 0.4f;
+            _hitSequence = DOTween.Sequence();
+            _hitSequence.AppendInterval(shootWaitTime).AppendCallback(GetHit);
+        }
         else
         {
             float shootWaitTime = 0.4f;
-            
-            _shootSequence = DOTween.Sequence();
-            _shootSequence.AppendInterval(shootWaitTime).AppendCallback(Death);
+            _hitSequence = DOTween.Sequence();
+            _hitSequence.AppendInterval(shootWaitTime).AppendCallback(Death);
         }
     }
 
@@ -88,6 +98,12 @@ public class CowboyView : MonoBehaviour
     {
         Debug.Log("Death");
         _animator.SetTrigger("Death");
+    }
+    
+    private void GetHit()
+    {
+        Debug.Log("GetHit");
+        _animator.SetTrigger("GetHit");
     }
 
     private void TakeGun()

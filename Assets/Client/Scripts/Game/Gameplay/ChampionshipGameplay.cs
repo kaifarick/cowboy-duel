@@ -12,9 +12,9 @@ public class ChampionshipGameplay : AGameplay
     }
     
     
-    public override void StartRound()
+    public override void PrepareGameRound()
     {
-        base.StartRound();
+        base.PrepareGameRound();
 
         if (_roundNum == 1 || _roundNum == 2)
         { 
@@ -30,17 +30,17 @@ public class ChampionshipGameplay : AGameplay
         GameData.RoundInfos[_roundNum].FirstPlayer.Name = FirstPlayer.Name;
         GameData.RoundInfos[_roundNum].SecondPlayer.Name = SecondPlayer.Name;
 
-        GameData.RoundInfos[_roundNum].FirstPlayer.GameItem = FirstPlayer.GameItem;
-        GameData.RoundInfos[_roundNum].SecondPlayer.GameItem = SecondPlayer.GameItem;
-
         GameData.RoundInfos[_roundNum].FirstPlayer.PlayersNumber = FirstPlayer.PlayersNumber;
         GameData.RoundInfos[_roundNum].SecondPlayer.PlayersNumber = SecondPlayer.PlayersNumber;
 
         GameData.RoundInfos[_roundNum].FirstPlayer.IsBot = FirstPlayer.IsBot;
         GameData.RoundInfos[_roundNum].SecondPlayer.IsBot = SecondPlayer.IsBot;
         
+        GameData.RoundInfos[_roundNum].FirstPlayer.SelectionItemsСharacteristic = FirstPlayer.SelectionItemsСharacteristic;
+        GameData.RoundInfos[_roundNum].SecondPlayer.SelectionItemsСharacteristic = SecondPlayer.SelectionItemsСharacteristic;
         
-        StartMoveTimer(MOVE_TIME, EndRoundTime);
+        CallPrepareRoundAction(GameData);
+        
     }
     
     private void EndRoundTime()
@@ -51,11 +51,25 @@ public class ChampionshipGameplay : AGameplay
         if(SecondPlayer.GameItem == GameEnum.GameItem.None) SelectItem(GameEnum.PlayersNumber.PlayerTwo);
     }
     
-    protected override void EndRound()
+    public override void NextRoundStep()
     {
-        base.EndRound();
+        base.NextRoundStep();
+        
+        StartMoveTimer(MOVE_TIME, EndRoundTime);
+    }
+
+    protected override void EndRoundStep()
+    {
+        base.EndRoundStep();
         
         StopMoveTimer();
+    }
+
+    public override void StartRound()
+    {
+        base.StartRound();
+        
+        StartMoveTimer(MOVE_TIME, EndRoundTime);
     }
 
     public override void EndGame()

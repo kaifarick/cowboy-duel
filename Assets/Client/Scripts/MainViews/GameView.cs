@@ -13,11 +13,18 @@ public class GameView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _timer;
     [SerializeField] private List<SelectionButtonsGroup> _selectionButtonsGroup;
 
+    [Space] 
+    [Header("DebugButtons")] 
+    [SerializeField] private Button _playerOneWinRound;
+    [SerializeField] private Button _playerTwoWinRound;
+
     [Inject] private GameManager _gameManager;
     [Inject] private GamePresenter _gamePresenter;
 
     public event Action<GameEnum.PlayersNumber> OnSelectionItemAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
+    public event Action OnNextRoundStepAction;
+    public event Action<GameData> OnPrepareRoundAction;
     public event Action OnGameEndAction;
 
 
@@ -28,20 +35,32 @@ public class GameView : MonoBehaviour
 
     private void Start()
     {
-        _gameManager.OnGameEndAction += OnGameEnd;
-        _gameManager.OnGameStartAction += OnStartGame;
-        _gameManager.OnRoundStartAction += OnRoundStart;
-        
-        _gamePresenter.OnSelectionItemAction += OnSelectionItem;
         _gamePresenter.OnStartMoveTimerAction += StartMoveTimer;
         _gamePresenter.OnEndMoveTimerAction += StopMoveTimer;
         _gamePresenter.OnTimerTickAction += OnTimerTick;  
+        
+        _gamePresenter.OnEndGameAction += OnGameEnd;
+        _gamePresenter.OnGameStartAction += OnStartGame;
+        
+        _gamePresenter.OnNextRoundStepAction += OnNextRoundStep;
+        _gamePresenter.OnStartRoundAction += OnRoundStart;
+        _gamePresenter.OnPrepareRoundAction += OnPrepareRound;
+        
+        _gamePresenter.OnSelectionItemAction += OnSelectionItem;
 
     }
-    
+
+    private void OnPrepareRound(GameData gameData)
+    {
+        OnPrepareRoundAction?.Invoke(gameData);
+    }
+
+
     private void SetButtons()
     {
         _homeButton.onClick.AddListener(() => _gameManager.GameEnd());
+        _playerOneWinRound.onClick.AddListener(() => _gamePresenter.DebugWinRound(GameEnum.PlayersNumber.PlayerOne));
+        _playerTwoWinRound.onClick.AddListener(() => _gamePresenter.DebugWinRound(GameEnum.PlayersNumber.PlayerTwo));
         
         foreach (var buttonsGroup in _selectionButtonsGroup)
         {
@@ -58,6 +77,11 @@ public class GameView : MonoBehaviour
     private void OnStartGame()
     {
         _canvas.enabled = true;
+    }
+    
+    private void OnNextRoundStep()
+    {
+        OnNextRoundStepAction?.Invoke();
     }
     
 

@@ -15,7 +15,7 @@ public class GameEnum : MonoBehaviour
         None,
         PlayerWin,
         BotWin,
-        Draw
+        Draw//remove?
     }
     
     public enum PlayersNumber

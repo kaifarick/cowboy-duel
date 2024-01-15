@@ -7,6 +7,13 @@ public abstract class APlayer
     public bool IsBot   { get; protected set; }
     public GameEnum.GameItem GameItem { get; protected set; } = GameEnum.GameItem.None;
     public GameEnum.PlayersNumber PlayersNumber { get; protected set; }
+    public int Health { get; private set; } = 100;
+    public SelectionItemsСharacteristic SelectionItemsСharacteristic { get; private set; }
+
+    public APlayer()
+    {
+        SelectionItemsСharacteristic = new SelectionItemsСharacteristic();
+    }
 
     public virtual void SelectItem(GameEnum.GameItem gameItem)
     {
@@ -23,5 +30,16 @@ public abstract class APlayer
             //debug
             GameItem = GameEnum.GameItem.Scissors;
         }
+    }
+
+    public void ResetData()
+    {
+        GameItem = GameEnum.GameItem.None;
+        if(IsBot) SelectItem(GameEnum.GameItem.None);
+    }
+
+    public void GetDamage(int damage)
+    {
+        Health -= damage;
     }
 }

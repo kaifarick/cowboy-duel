@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 public class SelectionButtonsGroup : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class SelectionButtonsGroup : MonoBehaviour
 
     private Action<GameEnum.PlayersNumber, GameEnum.GameItem> _onSelectionButtonClickAction;
 
+    private bool _isGroupUseInRound;
+
+    [Inject] protected GamePresenter _gamePresenter;
+
 
     public void Initialize(GameView gameView, Action<GameEnum.PlayersNumber,GameEnum.GameItem> onSelectionButtonClickAction)
     {
@@ -21,13 +26,23 @@ public class SelectionButtonsGroup : MonoBehaviour
         
         foreach (var button in _selectionItemButton)
         {
-            button.Initialize(gameView, _centre, _moveSpeed, SelectionButtonClick);
+            button.Initialize(gameView, _playersNumber, _centre, _moveSpeed, SelectionButtonClick);
         }
 
         gameView.OnRoundStartAction += OnRoundStart;
         gameView.OnGameEndAction += OnGameEnd;
         gameView.OnSelectionItemAction += OnSelectionItem;
+        gameView.OnNextRoundStepAction += OnNextRoundStep;
+        
 
+    }
+
+    private void OnNextRoundStep()
+    {
+        if (_isGroupUseInRound)
+        {
+            gameObject.SetActive(true);
+        }
     }
 
     private void SelectionButtonClick(GameEnum.GameItem gameItem)
@@ -42,7 +57,8 @@ public class SelectionButtonsGroup : MonoBehaviour
 
     private void OnRoundStart(GameEnum.GameplayType gameplayType)
     {
-        if (_playersNumber == GameEnum.PlayersNumber.PlayerOne || gameplayType == GameEnum.GameplayType.TwoPlayers)
+        _isGroupUseInRound = _playersNumber == GameEnum.PlayersNumber.PlayerOne || gameplayType == GameEnum.GameplayType.TwoPlayers;
+        if (_isGroupUseInRound)
         {
             gameObject.SetActive(true);
         }
