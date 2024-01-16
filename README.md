@@ -44,19 +44,6 @@ Requirements:
 	Track the progress of players through the championship rounds.
 	Display the winner of the championship.
  
-Additional Guidelines:
-	Use Unity for game development.
-	Implement simple UI for all screens and modes.
-	Provide options to navigate between screens (e.g., buttons to switch between menu and gameplay).
-	Ensure that the game has clear and intuitive controls for making selections.
-	Implement sound settings as described (sound on/off).
-	Make sure the game is visually appealing and functional.
-	Feel free to use any assets or graphics that you prefer.
- 
-Submission:
-	Share the Unity project containing the Rock, Paper, Scissors game.
-	Include a README file with instructions on how to build and run the game.
-	Provide any additional documentation or explanations if necessary.
- 
-Good luck with the test task!
 
+
+<img width="1235" alt="Снимок экрана 2024-01-16 в 13 15 07" src="https://github.com/kaifarick/cowboy-duel/assets/66444648/bbf28566-bd4f-4d2a-9b5c-7acce291c843">
