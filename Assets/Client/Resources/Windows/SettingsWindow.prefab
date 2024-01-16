@@ -721,6 +721,7 @@ GameObject:
   - component: {fileID: 3204175520843203209}
   - component: {fileID: 3204175520843203208}
   - component: {fileID: 3204175520843203211}
+  - component: {fileID: -8816529384554413102}
   m_Layer: 5
   m_Name: SettingsWindow
   m_TagString: Untagged
@@ -800,8 +801,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6342074b9a15c4c90600602c40fc03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: -8816529384554413102}
   _toggle: {fileID: 3204175520818014150}
   _closeButton: {fileID: 3204175519545733260}
+--- !u!225 &-8816529384554413102
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204175520843203213}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3204175521078805935
 GameObject:
   m_ObjectHideFlags: 0

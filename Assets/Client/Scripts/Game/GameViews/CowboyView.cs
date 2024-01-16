@@ -28,16 +28,16 @@ public class CowboyView : MonoBehaviour
         _gamePresenter.OnHitPlayerAction += OnHitPlayer;
 
 
-        var preSpace = 500;
+        var preSpacePercent = 20;
         _startPosition = _playersNumber == GameEnum.PlayersNumber.PlayerOne
-            ? _cameraManager.GetLeftPointWithSpace(-preSpace)
-            : _cameraManager.GetRightPointWithSpace(-preSpace);
+            ? _cameraManager.GetLeftPointWithSpace(-preSpacePercent)
+            : _cameraManager.GetRightPointWithSpace(-preSpacePercent);
         
         
-        var screenSpace = 300;
+        var screenSpacePercent = 12;
         _shootPosition = _playersNumber == GameEnum.PlayersNumber.PlayerOne
-            ? _cameraManager.GetLeftPointWithSpace(screenSpace)
-            : _cameraManager.GetRightPointWithSpace(screenSpace);
+            ? _cameraManager.GetLeftPointWithSpace(screenSpacePercent)
+            : _cameraManager.GetRightPointWithSpace(screenSpacePercent);
     }
     
 
@@ -66,7 +66,7 @@ public class CowboyView : MonoBehaviour
         
     }
     
-    private void OnHitPlayer(GameEnum.PlayersNumber playersNumber, int health)
+    private void OnHitPlayer(GameEnum.PlayersNumber playersNumber, int currentHealth, int damage)
     {
         if (playersNumber == GameEnum.PlayersNumber.None || playersNumber != _playersNumber)
         {
@@ -74,7 +74,7 @@ public class CowboyView : MonoBehaviour
             return;
         }
 
-        if (health > 0)
+        if (currentHealth > 0)
         {
             float shootWaitTime = 0.4f;
             _hitSequence = DOTween.Sequence();

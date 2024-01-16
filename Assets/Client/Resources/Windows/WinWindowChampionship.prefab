@@ -478,9 +478,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383bed9598d29dd45961b69bedc55511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: 4679358575182373822}
+  _isFastClose: 1
   _winPlayerTxt: {fileID: 8636697769927019484}
-  _playerOneItemTxt: {fileID: 302938987840098901}
-  _playerTwoItemTxt: {fileID: 856506008346365770}
+  _playerOneDamageTxt: {fileID: 302938987840098901}
+  _playerTwoDamageTxt: {fileID: 856506008346365770}
   _resumeButton: {fileID: 5324635125587864403}
   _bracketElements:
   - {fileID: 3810053656074152751}
@@ -490,6 +492,11 @@ MonoBehaviour:
   - {fileID: 8587675121351122323}
   - {fileID: 8587675120898128912}
   - {fileID: 8587675120127333605}
+--- !u!225 &4679358575182373822 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 135310298569763727, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+  m_PrefabInstance: {fileID: 4688489289785247793}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5324635125587864403 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 645205812446552930, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}

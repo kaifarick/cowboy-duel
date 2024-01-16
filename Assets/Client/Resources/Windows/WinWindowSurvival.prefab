@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Bob - Paper
+  m_text: Bob - 1000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -93,10 +93,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 47.65
-  m_fontSizeBase: 42.72
+  m_fontSize: 51
+  m_fontSizeBase: 51
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -172,8 +172,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 137.5, y: -50}
-  m_SizeDelta: {x: 275, y: 100}
+  m_AnchoredPosition: {x: 175, y: -50}
+  m_SizeDelta: {x: 350, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &444069477
 CanvasRenderer:
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.9607843, g: 0.39215687, b: 0.39215687, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -419,7 +419,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 275, y: 100}
+  m_CellSize: {x: 375, y: 125}
   m_Spacing: {x: 7.5, y: 20}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -526,6 +526,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5400439952601679739, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_text
+      value: 'Player Two damage : 1000'
+      objectReference: {fileID: 0}
     - target: {fileID: 5890608660627868125, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_Name
       value: WinWindowSurvival
@@ -557,9 +561,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9b447ece68c7e44bfcac84cf93b66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: 6288641665972290869}
+  _isFastClose: 1
   _winPlayerTxt: {fileID: 6948600465655016791}
-  _playerOneItemTxt: {fileID: 1405568341912909022}
-  _playerTwoItemTxt: {fileID: 2042169396589930945}
+  _playerOneDamageTxt: {fileID: 1405568341912909022}
+  _playerTwoDamageTxt: {fileID: 2042169396589930945}
   _resumeButton: {fileID: 6796269378018528728}
   _gridLayoutGroup: {fileID: 1875158255}
   _resultsElementPrefab: {fileID: 444069478}
@@ -591,6 +597,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &6288641665972290869 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 135310298569763727, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+  m_PrefabInstance: {fileID: 6243407149184855738}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6796269378018528728 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 645205812446552930, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}

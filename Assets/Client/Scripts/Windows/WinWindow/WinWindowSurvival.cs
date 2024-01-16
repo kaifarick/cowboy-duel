@@ -51,7 +51,7 @@ public class WinWindowSurvival : AWinWindow
         } 
         
         
-        currentElement.Initialize($"{roundInfo.SecondPlayer.Name} {roundInfo.SecondPlayer.GameItem}");
+        currentElement.Initialize($"{roundInfo.SecondPlayer.Name} - {roundInfo.SecondPlayer.DamageDone}");
     }
 
     private void OnGameEnd()

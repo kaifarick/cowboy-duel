@@ -6,7 +6,7 @@ public class GamePresenter :  IInitializable
 {
     public event Action<GameEnum.PlayersNumber,GameEnum.GameItem> OnSelectionItemAction;
     public event Action<Action<GameEnum.PrepareGameplayPoint>> OnCheckPreparePointsAction;
-    public event Action <GameEnum.PlayersNumber,int> OnHitPlayerAction;
+    public event Action <GameEnum.PlayersNumber,int, int> OnHitPlayerAction;
     
     
     public event Action OnEndGameAction;
@@ -151,11 +151,11 @@ public class GamePresenter :  IInitializable
 
     }
 
-    private void OnHitPlayer(GameEnum.PlayersNumber playersNumber, int health)
+    private void OnHitPlayer(GameEnum.PlayersNumber playersNumber, int currentHealth, int damage)
     {
-        OnHitPlayerAction?.Invoke(playersNumber,health);
+        OnHitPlayerAction?.Invoke(playersNumber,currentHealth, damage);
         
-        if(playersNumber != GameEnum.PlayersNumber.None && health <= 0) return;
+        if(playersNumber != GameEnum.PlayersNumber.None && currentHealth <= 0) return;
         
         float waitTime = 4;
         _hitPlayerSequence = DOTween.Sequence();

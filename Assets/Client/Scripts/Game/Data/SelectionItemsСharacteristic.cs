@@ -37,6 +37,12 @@ public class SelectionItemsСharacteristic
             {GameEnum.GameItem.Paper, 2},
             {GameEnum.GameItem.Scissors, 2},
         },
+        new Dictionary<GameEnum.GameItem, int>()
+        {
+            {GameEnum.GameItem.Rock, 3},
+            {GameEnum.GameItem.Paper, 2},
+            {GameEnum.GameItem.Scissors, 2},
+        },
     };
 
 
@@ -46,11 +52,11 @@ public class SelectionItemsСharacteristic
         switch (star)
         {
             case 1:
-                return Random.Range(10, 20);
+                return Random.Range(100, 200);
             case 2:
-                return Random.Range(20, 30);
+                return Random.Range(200, 300);
             case 3:
-                return Random.Range(30, 40);
+                return Random.Range(300, 400);
             
             default: return 0;
         }

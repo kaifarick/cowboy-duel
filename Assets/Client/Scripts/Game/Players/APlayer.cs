@@ -7,7 +7,7 @@ public abstract class APlayer
     public bool IsBot   { get; protected set; }
     public GameEnum.GameItem GameItem { get; protected set; } = GameEnum.GameItem.None;
     public GameEnum.PlayersNumber PlayersNumber { get; protected set; }
-    public int Health { get; private set; } = 100;
+    public int Health { get; private set; } = 1000;
     public SelectionItemsСharacteristic SelectionItemsСharacteristic { get; private set; }
 
     public APlayer()
@@ -28,7 +28,7 @@ public abstract class APlayer
             GameItem = (GameEnum.GameItem)values.GetValue(index);
             
             //debug
-            GameItem = GameEnum.GameItem.Scissors;
+            //GameItem = GameEnum.GameItem.Scissors;
         }
     }
 

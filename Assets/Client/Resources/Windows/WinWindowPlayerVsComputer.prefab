@@ -156,9 +156,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e43710028e4554dae52fad051f84aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: 7041725234986532285}
+  _isFastClose: 1
   _winPlayerTxt: {fileID: 6238302158111004127}
-  _playerOneItemTxt: {fileID: 2701334565329931350}
-  _playerTwoItemTxt: {fileID: 3074757548626399561}
+  _playerOneDamageTxt: {fileID: 2701334565329931350}
+  _playerTwoDamageTxt: {fileID: 3074757548626399561}
   _resumeButton: {fileID: 7542886649358824784}
 --- !u!114 &6238302158111004127 stripped
 MonoBehaviour:
@@ -171,6 +173,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &7041725234986532285 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 135310298569763727, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+  m_PrefabInstance: {fileID: 6942734460063667762}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7542886649358824784 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 645205812446552930, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}

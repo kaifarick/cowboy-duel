@@ -19,9 +19,10 @@ public class GameData
     {
         public string Name;
         public bool IsBot;
+        public int DamageDone;
+        
         public SelectionItemsСharacteristic SelectionItemsСharacteristic;
         
-        public GameEnum.GameItem GameItem;
         public GameEnum.PlayersNumber PlayersNumber;
     }
     

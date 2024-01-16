@@ -12,21 +12,26 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Slider _slider;
     [SerializeField] private GameEnum.PlayersNumber _playersNumber;
     [SerializeField] private TextMeshProUGUI _name;
+    [SerializeField] private TextMeshProUGUI _damageText;
 
     [Inject] private GamePresenter _gamePresenter;
 
     private Sequence _prepareSequence;
+    private Sequence _hitSequence;
 
     private void Start()
     {
         _gamePresenter.OnHitPlayerAction += OnHitPlayer;
         _gamePresenter.OnPrepareRoundAction += OnPrepareRound;
         _gamePresenter.OnEndGameAction += OnEndGame;
+        
+        _damageText.alpha = 0;
     }
 
     private void OnEndGame()
     {
         _prepareSequence.Kill();
+        _hitSequence.Kill();
     }
 
 
@@ -43,8 +48,18 @@ public class HealthBar : MonoBehaviour
     }
 
 
-    private void OnHitPlayer(GameEnum.PlayersNumber playersNumber, int health)
+    private void OnHitPlayer(GameEnum.PlayersNumber playersNumber, int currentHealth, int damage)
     {
-        if (playersNumber == _playersNumber) _slider.value = health;
+        if (playersNumber == _playersNumber)
+        {
+            _damageText.text = $"-{damage}";
+            
+            _hitSequence = DOTween.Sequence();
+            _hitSequence.PrependInterval(0.4f);
+            _hitSequence.Append(_damageText.DOFade(1f, 0.1f));
+            _hitSequence.Append(_slider.DOValue(currentHealth, 2));
+            _hitSequence.AppendInterval(1.5f);
+            _hitSequence.AppendCallback((() => _damageText.DOFade(0f, 0.1f)));
+        }
     }
 }

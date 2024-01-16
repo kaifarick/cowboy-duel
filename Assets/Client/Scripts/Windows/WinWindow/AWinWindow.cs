@@ -7,8 +7,8 @@ using Zenject;
 public abstract class AWinWindow : BaseWindow
 {
     [SerializeField] protected TextMeshProUGUI _winPlayerTxt;
-    [SerializeField] protected TextMeshProUGUI _playerOneItemTxt;
-    [SerializeField] protected TextMeshProUGUI _playerTwoItemTxt;
+    [SerializeField] protected TextMeshProUGUI _playerOneDamageTxt;
+    [SerializeField] protected TextMeshProUGUI _playerTwoDamageTxt;
     
     [SerializeField] protected Button _resumeButton;
 
@@ -20,8 +20,8 @@ public abstract class AWinWindow : BaseWindow
         string winTxt = roundResult == GameEnum.RoundResult.Draw ? roundResult.ToString() : $"{gameData.RoundInfos[roundNum].WinnerPlayer.Name} win!";
         _winPlayerTxt.text = winTxt;
         
-        _playerOneItemTxt.text = $"{gameData.RoundInfos[roundNum].FirstPlayer.Name}: {gameData.RoundInfos[roundNum].FirstPlayer.GameItem}";
-        _playerTwoItemTxt.text = $"{gameData.RoundInfos[roundNum].SecondPlayer.Name}: {gameData.RoundInfos[roundNum].SecondPlayer.GameItem}";
+        _playerOneDamageTxt.text = $"{gameData.RoundInfos[roundNum].FirstPlayer.Name} damage: {gameData.RoundInfos[roundNum].FirstPlayer.DamageDone}";
+        _playerTwoDamageTxt.text = $"{gameData.RoundInfos[roundNum].SecondPlayer.Name} damage: {gameData.RoundInfos[roundNum].SecondPlayer.DamageDone}";
         
         _resumeButton.onClick.AddListener(Hide);
         
