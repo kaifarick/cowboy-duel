@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
     }
     
 
-    private void OnPrepareRound(GameData gameData)
+    private void OnPrepareRound()
     {
         ResetPrepareData();
         OnCheckPreparePointsAction?.Invoke(CheckPreparePoints);

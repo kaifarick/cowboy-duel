@@ -14,14 +14,15 @@ public class MenuView : MonoBehaviour
     [SerializeField] private Button _championshipBtn;
 
     [Inject] private GameManager _gameManager;
+    [Inject] private DataManager _dataManager;
     [Inject] private WindowsManager _windowsManager;
 
     private void Awake()
     {
-        _playerVsComputerBtn.onClick.AddListener(() => _gameManager.StartGame(new PlayerVsComputerGameplay(_gameManager)));
-        _playerVsPlayerBtn.onClick.AddListener(() => _gameManager.StartGame(new PlayerVsPlayerGameplay(_gameManager)));
-        _survivalModeBtn.onClick.AddListener(() => _gameManager.StartGame(new SurvivalGameplay(_gameManager)));
-        _championshipBtn.onClick.AddListener(() => _gameManager.StartGame(new ChampionshipGameplay(_gameManager)));
+        _playerVsComputerBtn.onClick.AddListener(() => _gameManager.StartGame(new PlayerVsComputerGameplay(_dataManager)));
+        _playerVsPlayerBtn.onClick.AddListener(() => _gameManager.StartGame(new PlayerVsPlayerGameplay(_dataManager)));
+        _survivalModeBtn.onClick.AddListener(() => _gameManager.StartGame(new SurvivalGameplay(_dataManager)));
+        _championshipBtn.onClick.AddListener(() => _gameManager.StartGame(new ChampionshipGameplay(_dataManager)));
 
         _settingsButton.onClick.AddListener((() => _windowsManager.OpenWindow<SettingsWindow>()));
     }

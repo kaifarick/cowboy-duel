@@ -18,8 +18,8 @@ public class GamePresenter :  IInitializable
 
 
     public event Action<GameEnum.GameplayType> OnStartRoundAction;
-    public event Action<GameData> OnEndRoundAction;
-    public event Action<GameData> OnPrepareRoundAction;
+    public event Action OnEndRoundAction;
+    public event Action OnPrepareRoundAction;
 
 
     public event Action<int> OnStartMoveTimerAction;
@@ -34,6 +34,7 @@ public class GamePresenter :  IInitializable
 
     [Inject] private GameManager _gameManager;
     [Inject] private WindowsManager _windowsManager;
+    [Inject] private DataManager _dataManager;
 
     
     public void Initialize()
@@ -120,9 +121,9 @@ public class GamePresenter :  IInitializable
         OnStartRoundAction?.Invoke(gameplayType);
     }
     
-    private void OnPrepareRound(GameData gameData)
+    private void OnPrepareRound()
     {
-        OnPrepareRoundAction?.Invoke(gameData);
+        OnPrepareRoundAction?.Invoke();
     }
     
     private void OnSelectedItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem = GameEnum.GameItem.None)
@@ -141,13 +142,13 @@ public class GamePresenter :  IInitializable
         OnCheckPreparePointsAction?.Invoke((point => onComplete?.Invoke(point)));
     }
     
-    private void OnEndRound(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
+    private void OnEndRound(GameEnum.RoundResult roundResult, int roundNum)
     {
-        OnEndRoundAction?.Invoke(gameData);
+        OnEndRoundAction?.Invoke();
 
         int winWindowDelay = 3;
         _endRoundSequence = DOTween.Sequence();
-        _endRoundSequence.AppendInterval(winWindowDelay).AppendCallback(() => ShowWinWindow(gameData,roundResult,roundNum));
+        _endRoundSequence.AppendInterval(winWindowDelay).AppendCallback(() => ShowWinWindow(roundResult,roundNum));
 
     }
 
@@ -162,7 +163,7 @@ public class GamePresenter :  IInitializable
         _hitPlayerSequence.AppendInterval(waitTime).AppendCallback(NextRoundStep);
     }
     
-    private void ShowWinWindow(GameData gameData, GameEnum.RoundResult roundResult, int roundNum)
+    private void ShowWinWindow(GameEnum.RoundResult roundResult, int roundNum)
     {
         AWinWindow winWindow = null;
         if (_gameplay is PlayerVsComputerGameplay) winWindow = _windowsManager.OpenWindow<WinWindowPlayerVsComputer>();
@@ -170,7 +171,7 @@ public class GamePresenter :  IInitializable
         if (_gameplay is SurvivalGameplay) winWindow = _windowsManager.OpenWindow<WinWindowSurvival>();
         if (_gameplay is ChampionshipGameplay) winWindow = _windowsManager.OpenWindow<WinWindowChampionship>();
         
-        winWindow.Initialize(gameData, roundResult, roundNum);
+        winWindow.Initialize(_dataManager.GameData, roundResult, roundNum);
     }
     
     

@@ -10,15 +10,16 @@ public abstract class AGameplay
     
     protected GameEnum.GameplayType GameplayType;
     protected GameEnum.RoundResult _roundResult;
-    protected GameData GameData;
+
     
     protected int _roundTimeLeft;
     protected int _roundNum;
 
     protected IPlayerDamager _iPlayerDamager;
+    protected DataManager _dataManager;
     
     
-    public event Action<GameData, GameEnum.RoundResult, int> OnEndRoundAction;
+    public event Action<GameEnum.RoundResult, int> OnEndRoundAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
     
     
@@ -33,7 +34,7 @@ public abstract class AGameplay
 
     public event Action<GameEnum.PlayersNumber, int, int> OnGetHitAction;
     public event Action<GameEnum.PlayersNumber, GameEnum.GameItem> OnSelectedItemAction;
-    public event Action<GameData> OnPrepareRoundAction;
+    public event Action OnPrepareRoundAction;
 
 
 
@@ -43,11 +44,11 @@ public abstract class AGameplay
 
     
 
-    protected AGameplay(GameEnum.GameplayType gameplayType)
+    protected AGameplay(DataManager dataManager, GameEnum.GameplayType gameplayType)
     {
         GameplayType = gameplayType;
+        _dataManager = dataManager;
         
-        GameData = new GameData(){RoundInfos = new Dictionary<int, GameData.RoundInfo>()};
 #if DEBUG_LOGIC
         _iPlayerDamager = new DebugPlayerDamager();
 #else
@@ -67,17 +68,9 @@ public abstract class AGameplay
     public virtual void PrepareGameRound()
     {
         if(_roundResult != GameEnum.RoundResult.Draw) _roundNum++;
-        if(!GameData.RoundInfos.ContainsKey(_roundNum)) GameData.RoundInfos.Add(_roundNum, new GameData.RoundInfo()
-        {
-            FirstPlayer = new GameData.PlayerInfo(),
-            SecondPlayer = new GameData.PlayerInfo(),
-            WinnerPlayer = new GameData.PlayerInfo()
-        });
-        
-
         PlayersWin = null;
-        GameData.CurrentRound = _roundNum;
         
+        _dataManager.CreateRoundData(_roundNum);
     }
 
     public virtual void StartGame()
@@ -104,7 +97,7 @@ public abstract class AGameplay
 
         if (FirstPlayer?.GameItem != GameEnum.GameItem.None && SecondPlayer?.GameItem != GameEnum.GameItem.None)
         {
-            SetPlayerDamage();
+            DamagePlayer();
             EndRoundStep();
         }
 
@@ -128,7 +121,7 @@ public abstract class AGameplay
         OnSelectedItemAction?.Invoke(FirstPlayer.PlayersNumber,FirstPlayer.GameItem);
         OnSelectedItemAction?.Invoke(SecondPlayer.PlayersNumber,SecondPlayer.GameItem);
         
-        SetPlayerDamage(true);
+        DamagePlayer(true);
         EndRoundStep();
     }
 
@@ -147,29 +140,26 @@ public abstract class AGameplay
         OnEndRoundStepAction?.Invoke();
 
         var hitterPlayer = _iPlayerDamager.GetHittingPlayer(FirstPlayer,SecondPlayer);
-        var strikingPlayer = _iPlayerDamager.GetStrikingPlayer(FirstPlayer, SecondPlayer);
-        
         if (hitterPlayer != null && hitterPlayer.Health <= 0)
         {
-            PlayersWin = strikingPlayer;
-
-            GameData.RoundInfos[_roundNum].WinnerPlayer.Name = strikingPlayer.Name;
-            GameData.RoundInfos[_roundNum].WinnerPlayer.PlayersNumber = strikingPlayer.PlayersNumber;
-
-            if (strikingPlayer.IsBot)
-            {
-                _roundResult = GameEnum.RoundResult.BotWin;
-                GameData.RoundInfos[_roundNum].WinnerPlayer.IsBot = true;
-            }
-            else if (!strikingPlayer.IsBot) _roundResult = GameEnum.RoundResult.PlayerWin;
-
             EndRound();
         }
     }
 
     protected virtual void EndRound()
     {
-        OnEndRoundAction?.Invoke(GameData, _roundResult, _roundNum);
+        var strikingPlayer = _iPlayerDamager.GetStrikingPlayer(FirstPlayer, SecondPlayer);
+        PlayersWin = strikingPlayer;
+
+        if (strikingPlayer.IsBot)
+        {
+            _roundResult = GameEnum.RoundResult.BotWin;
+        }
+        else if (!strikingPlayer.IsBot) _roundResult = GameEnum.RoundResult.PlayerWin;
+        
+        _dataManager.EndRoundData(strikingPlayer);
+        
+        OnEndRoundAction?.Invoke(_roundResult, _roundNum);
     }
 
     protected void StopMoveTimer()
@@ -189,12 +179,13 @@ public abstract class AGameplay
         OnStartMoveTimerAction?.Invoke(time);
     }
 
-    protected void CallPrepareRoundAction(GameData gameData)
+    protected void CallPrepareRoundAction()
     {
-        OnPrepareRoundAction?.Invoke(gameData);
+        _dataManager.PrepareRoundData(FirstPlayer,SecondPlayer,_roundNum);
+        OnPrepareRoundAction?.Invoke();
     }
 
-    protected void SetPlayerDamage(bool isDebug = false)
+    protected void DamagePlayer(bool isDebug = false)
     {
         var hitterPlayer = _iPlayerDamager.GetHittingPlayer(FirstPlayer,SecondPlayer);
         var strikingPlayer = _iPlayerDamager.GetStrikingPlayer(FirstPlayer, SecondPlayer);
@@ -211,8 +202,7 @@ public abstract class AGameplay
             var playerDamage = !isDebug ? strikingPlayer.SelectionItemsСharacteristic.DamageValue[strikingPlayer.GameItem] : 1000;
             hitterPlayer.GetDamage(playerDamage);
 
-            if (strikingPlayer.PlayersNumber == GameEnum.PlayersNumber.PlayerOne) GameData.RoundInfos[_roundNum].FirstPlayer.DamageDone += playerDamage;
-            else if (strikingPlayer.PlayersNumber == GameEnum.PlayersNumber.PlayerTwo) GameData.RoundInfos[_roundNum].SecondPlayer.DamageDone += playerDamage;
+            _dataManager.DamageData(strikingPlayer.PlayersNumber, playerDamage);
 
             OnGetHitAction?.Invoke(hitterPlayer.PlayersNumber,hitterPlayer.Health, playerDamage);
             

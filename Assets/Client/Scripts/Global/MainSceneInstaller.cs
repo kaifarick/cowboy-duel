@@ -14,6 +14,7 @@ public class MainSceneInstaller : MonoInstaller
     {
         Container.BindInterfacesAndSelfTo<WindowsManager>().FromInstance(_windowsManager).AsSingle();
         Container.BindInterfacesAndSelfTo<GameManager>().FromInstance(_gameManager).AsSingle();
+        Container.BindInterfacesAndSelfTo<DataManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<GamePresenter>().AsSingle();
         Container.BindInterfacesAndSelfTo<AudioManager>().FromInstance(_audioManager).AsSingle();
         Container.BindInterfacesAndSelfTo<CameraManager>().FromInstance(cameraManager).AsSingle();

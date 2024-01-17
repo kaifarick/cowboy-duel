@@ -15,6 +15,7 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _damageText;
 
     [Inject] private GamePresenter _gamePresenter;
+    [Inject] private DataManager _dataManager;
 
     private Sequence _prepareSequence;
     private Sequence _hitSequence;
@@ -35,11 +36,11 @@ public class HealthBar : MonoBehaviour
     }
 
 
-    private void OnPrepareRound(GameData gameData)
+    private void OnPrepareRound()
     {
         _name.text = _playersNumber == GameEnum.PlayersNumber.PlayerOne
-            ? gameData.RoundInfos[gameData.CurrentRound].FirstPlayer.Name
-            : gameData.RoundInfos[gameData.CurrentRound].SecondPlayer.Name;
+            ? _dataManager.GameData.RoundInfos[_dataManager.GameData.CurrentRound].FirstPlayer.Name
+            : _dataManager.GameData.RoundInfos[_dataManager.GameData.CurrentRound].SecondPlayer.Name;
         
         
         _slider.value = _slider.minValue;

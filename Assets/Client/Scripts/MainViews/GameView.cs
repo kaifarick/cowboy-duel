@@ -20,6 +20,7 @@ public class GameView : MonoBehaviour
 
     [Inject] private GameManager _gameManager;
     [Inject] private GamePresenter _gamePresenter;
+    [Inject] private DataManager _dataManager;
 
     public event Action<GameEnum.PlayersNumber> OnSelectionItemAction;
     public event Action<GameEnum.GameplayType> OnRoundStartAction;
@@ -50,9 +51,9 @@ public class GameView : MonoBehaviour
 
     }
 
-    private void OnPrepareRound(GameData gameData)
+    private void OnPrepareRound()
     {
-        OnPrepareRoundAction?.Invoke(gameData);
+        OnPrepareRoundAction?.Invoke(_dataManager.GameData);
     }
 
 

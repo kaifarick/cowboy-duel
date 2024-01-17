@@ -23,7 +23,6 @@ public class CowboyView : MonoBehaviour
     {
         _gamePresenter.OnEndGameAction += OnGameEnd;
         
-        _gamePresenter.OnEndRoundAction += OnEndRound;
         _gamePresenter.OnCheckPreparePointsAction += OnCheckPreparePoints;
         _gamePresenter.OnHitPlayerAction += OnHitPlayer;
 
@@ -60,11 +59,7 @@ public class CowboyView : MonoBehaviour
             .InsertCallback(2f, () => _animator.SetTrigger("Idle"))
             .AppendCallback(() => onComplete?.Invoke(GameEnum.PrepareGameplayPoint.Animations));
     }
-
-    private void OnEndRound(GameData gameData)
-    {
-        
-    }
+    
     
     private void OnHitPlayer(GameEnum.PlayersNumber playersNumber, int currentHealth, int damage)
     {
