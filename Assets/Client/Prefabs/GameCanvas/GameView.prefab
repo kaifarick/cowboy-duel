@@ -322,7 +322,7 @@ GameObject:
   - component: {fileID: 1175157581885372653}
   - component: {fileID: 1175157581885372649}
   m_Layer: 5
-  m_Name: GameCanvas
+  m_Name: GameView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1058,6 +1058,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1175157581885372648}
     m_Modifications:
+    - target: {fileID: 1952981980568110926, guid: ddf00e0e6c03840bbbe0661f4b274d3a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 1952981981723928780, guid: ddf00e0e6c03840bbbe0661f4b274d3a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -125
+      objectReference: {fileID: 0}
+    - target: {fileID: 1952981981723928780, guid: ddf00e0e6c03840bbbe0661f4b274d3a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 125
+      objectReference: {fileID: 0}
     - target: {fileID: 2397938900789606087, guid: ddf00e0e6c03840bbbe0661f4b274d3a, type: 3}
       propertyPath: target
       value: 
@@ -1314,6 +1326,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1175157581885372648}
     m_Modifications:
+    - target: {fileID: 233230795084253701, guid: ddf00e0e6c03840bbbe0661f4b274d3a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 233230796335949191, guid: ddf00e0e6c03840bbbe0661f4b274d3a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3162532292035472322, guid: ddf00e0e6c03840bbbe0661f4b274d3a, type: 3}
       propertyPath: m_Name
       value: SelectionButtonsGroupLeft
