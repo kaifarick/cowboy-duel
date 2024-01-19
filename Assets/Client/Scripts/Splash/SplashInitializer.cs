@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SplashInitializer : MonoBehaviour
 {
     [SerializeField] private SplashLoader splashLoader;
+    [SerializeField] private CanvasGroup _canvasGroup;
 
     private const int MIN_LOAD_TIME = 1;
     private bool _minTimeLeft;
@@ -38,10 +40,11 @@ public class SplashInitializer : MonoBehaviour
             //Debug.Log("progress" + load.progress);
             splashLoader.UpdateView(updateTime,load.progress);
         }
-        
-        yield return new WaitForSeconds(updateTime);
-        
-        SceneManager.UnloadSceneAsync((int)Scene.Initialize);
+
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(_canvasGroup.DOFade(0, 1));
+        sequence.AppendCallback(() => SceneManager.UnloadSceneAsync((int) Scene.Initialize));
+
     }
     
 }
