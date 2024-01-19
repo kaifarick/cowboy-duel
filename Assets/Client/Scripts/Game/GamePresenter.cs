@@ -146,7 +146,7 @@ public class GamePresenter :  IInitializable
     {
         OnEndRoundAction?.Invoke();
 
-        int winWindowDelay = 3;
+        float winWindowDelay = 3.5f;
         _endRoundSequence = DOTween.Sequence();
         _endRoundSequence.AppendInterval(winWindowDelay).AppendCallback(() => ShowWinWindow(roundResult,roundNum));
 
