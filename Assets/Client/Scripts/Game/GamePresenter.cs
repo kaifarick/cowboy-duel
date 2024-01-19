@@ -90,6 +90,8 @@ public class GamePresenter :  IInitializable
     private void OnGameEnd()
     {
         _endRoundSequence.Kill();
+        _hitPlayerSequence.Kill();
+        
         OnEndGameAction?.Invoke();
         
         _gameplay.OnStartMoveTimerAction -= OnStartMoveTimer;

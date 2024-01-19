@@ -31,6 +31,8 @@ public class HealthBar : MonoBehaviour
 
     private void OnEndGame()
     {
+        _damageText.alpha = 0;
+        
         _prepareSequence.Kill();
         _hitSequence.Kill();
     }
