@@ -52,7 +52,7 @@ public abstract class AGameplay
 #if DEBUG_LOGIC
         _iPlayerDamager = new DebugPlayerDamager();
 #else
-        _iPlayerDamager = new StandartDamager();
+        _iPlayerDamager = new StandartPlayerDamager();
 #endif
     }
     

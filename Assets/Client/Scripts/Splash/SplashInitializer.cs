@@ -19,6 +19,8 @@ public class SplashInitializer : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 60;
+        
         StartCoroutine(Initializer());
         TimerManager.WaitAndCall("splashLoader", MIN_LOAD_TIME, () => _minTimeLeft = true);
     }
