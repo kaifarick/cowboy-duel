@@ -53,6 +53,7 @@ public class DataManager
 
     public void DamageData(GameEnum.PlayersNumber playersNumber, int damage)
     {
-        GameData.RoundInfos[GameData.CurrentRound].FirstPlayer.DamageDone += damage;
+        if(playersNumber == GameEnum.PlayersNumber.PlayerOne) GameData.RoundInfos[GameData.CurrentRound].FirstPlayer.DamageDone += damage;
+        else GameData.RoundInfos[GameData.CurrentRound].SecondPlayer.DamageDone += damage;
     }
 }

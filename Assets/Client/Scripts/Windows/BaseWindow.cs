@@ -10,12 +10,10 @@ public abstract class BaseWindow : MonoBehaviour
 
     public virtual void Show()
     {
+        gameObject.SetActive(true);
+        _canvasGroup.alpha = 0;
+        
         var sequence = DOTween.Sequence();
-        sequence.PrependCallback((() =>
-        {
-            gameObject.SetActive(true);
-            _canvasGroup.alpha = 0;
-        }));
         sequence.Append(_canvasGroup.DOFade(1, 0.2f).SetEase(Ease.OutQuad));
     }
 

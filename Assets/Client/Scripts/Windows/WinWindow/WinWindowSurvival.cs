@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 public class WinWindowSurvival : AWinWindow
 {
@@ -37,7 +35,9 @@ public class WinWindowSurvival : AWinWindow
 
     private void AddOpponentResult(GameData.RoundInfo roundInfo)
     {
-        if(_resultsElements.Count >= 15 && _resultsElements.TrueForAll((element => element.isActiveAndEnabled)))
+        int maxСapacity = 10;
+        
+        if(_resultsElements.Count >= maxСapacity && _resultsElements.TrueForAll((element => element.isActiveAndEnabled)))
             _resultsElements.ForEach((element => element.gameObject.SetActive(false)));
         
         

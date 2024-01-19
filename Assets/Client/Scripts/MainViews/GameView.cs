@@ -15,8 +15,9 @@ public class GameView : MonoBehaviour
 
     [Space] 
     [Header("DebugButtons")] 
-    [SerializeField] private Button _playerOneWinRound;
-    [SerializeField] private Button _playerTwoWinRound;
+    [SerializeField] private Button _playerOneWinRoundButton;
+    [SerializeField] private Button _playerTwoWinRoundButton;
+    [SerializeField] private GameObject _debugButtonBox;
 
     [Inject] private GameManager _gameManager;
     [Inject] private GamePresenter _gamePresenter;
@@ -60,20 +61,30 @@ public class GameView : MonoBehaviour
     private void SetButtons()
     {
         _homeButton.onClick.AddListener(() => _gameManager.GameEnd());
-        _playerOneWinRound.onClick.AddListener(() => _gamePresenter.DebugWinRound(GameEnum.PlayersNumber.PlayerOne));
-        _playerTwoWinRound.onClick.AddListener(() => _gamePresenter.DebugWinRound(GameEnum.PlayersNumber.PlayerTwo));
-        
+
         foreach (var buttonsGroup in _selectionButtonsGroup)
         {
             buttonsGroup.Initialize(this,  SelectedItem);
         }
+        
+        DebugButtonState();
+    }
+
+    private void DebugButtonState()
+    {
+#if DEBUG_LOGIC
+        _debugButtonBox.gameObject.SetActive(true);
+        
+        _playerOneWinRoundButton.onClick.AddListener(() => _gamePresenter.DebugWinRound(GameEnum.PlayersNumber.PlayerOne));
+        _playerTwoWinRoundButton.onClick.AddListener(() => _gamePresenter.DebugWinRound(GameEnum.PlayersNumber.PlayerTwo));
+#endif
     }
 
     private void SelectedItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem)
     {
         _gamePresenter.SelectedItemClick(playersNumber, gameItem);
     }
-    
+
 
     private void OnStartGame()
     {

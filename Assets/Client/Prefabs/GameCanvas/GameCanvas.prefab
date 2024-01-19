@@ -285,7 +285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1175157581449989298
 RectTransform:
   m_ObjectHideFlags: 0
@@ -433,8 +433,9 @@ MonoBehaviour:
   _selectionButtonsGroup:
   - {fileID: 5834135694117221295}
   - {fileID: 8868873947027996099}
-  _playerOneWinRound: {fileID: 1175157582255636288}
-  _playerTwoWinRound: {fileID: 1175157581954346891}
+  _playerOneWinRoundButton: {fileID: 1175157582255636288}
+  _playerTwoWinRoundButton: {fileID: 1175157581954346891}
+  _debugButtonBox: {fileID: 1175157581449989301}
 --- !u!1 &1175157581954346893
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,7 +449,7 @@ GameObject:
   - component: {fileID: 1175157581954346888}
   - component: {fileID: 1175157581954346891}
   m_Layer: 5
-  m_Name: WinRoundButtonRight
+  m_Name: WinRoundButtonPTwo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -570,7 +571,7 @@ GameObject:
   - component: {fileID: 1175157582255636289}
   - component: {fileID: 1175157582255636288}
   m_Layer: 5
-  m_Name: WinRoundButtonLeft
+  m_Name: WinRoundButtonPOne
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
