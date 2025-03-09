@@ -72,6 +72,11 @@ public class PlayerVsPlayerGameplay : AGameplay
     public override void SelectItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem = GameEnum.GameItem.None)
     {
         StopMoveTimer();
+        if (playersNumber == GameEnum.PlayersNumber.PlayerOne)
+        {
+            StartMoveTimer(MOVE_TIME, EndRoundTime);
+        }
+
         base.SelectItem(playersNumber, gameItem);
     }
 }
