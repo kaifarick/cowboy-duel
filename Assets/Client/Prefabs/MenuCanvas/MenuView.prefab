@@ -426,6 +426,7 @@ GameObject:
   - component: {fileID: 4723834369816273916}
   - component: {fileID: 4723834369816273917}
   - component: {fileID: 4723834369816273918}
+  - component: {fileID: 2792334617466382686}
   m_Layer: 5
   m_Name: SettingsButton
   m_TagString: Untagged
@@ -475,14 +476,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9607843, g: 0.39215687, b: 0.39215687, a: 1}
+  m_Color: {r: 0.8039216, g: 0.52156866, b: 0.24705882, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 105aa01b1530a1e48ba3df5d4a1cae8b, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -491,7 +492,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.2
+  m_PixelsPerUnitMultiplier: 1.36
 --- !u!114 &4723834369816273918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536,6 +537,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2792334617466382686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4723834369816273919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3210bc625911d4657b433bc9d5ee1405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorStart: {r: 0.8039216, g: 0.52156866, b: 0.24705882, a: 1}
+  _colorEnd: {r: 1, g: 1, b: 1, a: 1}
+  _angle: -94
 --- !u!1 &4723834370328752219
 GameObject:
   m_ObjectHideFlags: 0

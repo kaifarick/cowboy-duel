@@ -68,7 +68,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Bob - 1000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_fontSize: 51
   m_fontSizeBase: 51
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &444069474
@@ -294,8 +294,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Round : 5'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+  m_sharedMaterial: {fileID: 197174831904289709, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -319,12 +319,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 59.05
+  m_fontSize: 73.3
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 144.5
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -430,6 +430,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2850181208636907698, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_fontSize
+      value: 88.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850181208636907698, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+    - target: {fileID: 2850181208636907698, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 90.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850181208636907698, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 197174831904289709, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+    - target: {fileID: 2850181208636907698, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948367110802441197, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_fontSize
+      value: 94.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948367110802441197, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+    - target: {fileID: 3948367110802441197, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 197174831904289709, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+    - target: {fileID: 3948367110802441197, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3964587866784280114, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_SizeDelta.y
       value: 66
@@ -518,6 +554,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4982280040139774564, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_fontSize
+      value: 73.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982280040139774564, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+    - target: {fileID: 4982280040139774564, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 197174831904289709, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+    - target: {fileID: 4982280040139774564, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5073409327512534978, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_SizeDelta.y
       value: 1000
@@ -529,6 +581,22 @@ PrefabInstance:
     - target: {fileID: 5400439952601679739, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_text
       value: 'Player Two damage : 1000'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400439952601679739, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_fontSize
+      value: 73.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400439952601679739, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+    - target: {fileID: 5400439952601679739, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 197174831904289709, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+    - target: {fileID: 5400439952601679739, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5890608660627868125, guid: a7a4c5a2e4548834f8bf3b285f8aa07b, type: 3}
       propertyPath: m_Name

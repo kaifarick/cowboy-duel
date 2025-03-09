@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6903429870370834672}
   - component: {fileID: 2074054122101702257}
   - component: {fileID: 645205812446552930}
+  - component: {fileID: 6501681124646802249}
   m_Layer: 5
   m_Name: ResumeButton
   m_TagString: Untagged
@@ -61,14 +62,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9607843, g: 0.39215687, b: 0.39215687, a: 1}
+  m_Color: {r: 0.8039216, g: 0.52156866, b: 0.24705882, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 105aa01b1530a1e48ba3df5d4a1cae8b, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -77,7 +78,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.2
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &645205812446552930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,6 +123,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6501681124646802249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3655670834100880417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3210bc625911d4657b433bc9d5ee1405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorStart: {r: 1, g: 1, b: 1, a: 1}
+  _colorEnd: {r: 0.9254902, g: 0.36078432, b: 0.05490196, a: 1}
+  _angle: 61
 --- !u!1 &3948367110802441203
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,8 +206,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: You Win
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+  m_sharedMaterial: {fileID: 197174831904289709, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -215,7 +231,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 76.05
+  m_fontSize: 94.4
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -325,15 +341,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Resume
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+  m_sharedMaterial: {fileID: 197174831904289709, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4288403199
-  m_fontColor: {r: 1, g: 0.8392157, b: 0.60784316, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -350,12 +366,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 88.85
   m_fontSizeBase: 72
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 254.1
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -494,6 +510,7 @@ GameObject:
   - component: {fileID: 7790650132736355758}
   - component: {fileID: 1066120614131442301}
   - component: {fileID: 5656781762955206057}
+  - component: {fileID: 4237982187961958988}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -542,7 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8392157, b: 0.60784316, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -559,6 +576,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.2
+--- !u!114 &4237982187961958988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7039568015433327258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3210bc625911d4657b433bc9d5ee1405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorStart: {r: 1, g: 1, b: 1, a: 1}
+  _colorEnd: {r: 0.9529412, g: 0.8980392, b: 0.67058825, a: 1}
+  _angle: 0
 --- !u!1 &7515406369070400697
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,8 +700,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Player Two Damage : 333'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+  m_sharedMaterial: {fileID: 197174831904289709, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -693,10 +725,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 66
+  m_fontSize: 94.4
   m_fontSizeBase: 66
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 143.5
   m_fontStyle: 0
@@ -803,8 +835,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Player One Damage : 333'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
+  m_sharedMaterial: {fileID: 197174831904289709, guid: 6cf645e8b10f6463d8778c2c8c851095, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -828,10 +860,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 66
+  m_fontSize: 94.4
   m_fontSizeBase: 66
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 143.5
   m_fontStyle: 0
