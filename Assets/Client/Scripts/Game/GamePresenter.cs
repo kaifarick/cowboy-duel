@@ -175,6 +175,11 @@ public class GamePresenter :  IInitializable
         
         winWindow.Initialize(_dataManager.GameData, roundResult, roundNum);
     }
+
+    public GameEnum.GameplayType GetGameplayType()
+    {
+        return _gameplay.GameplayType;
+    }
     
     
 

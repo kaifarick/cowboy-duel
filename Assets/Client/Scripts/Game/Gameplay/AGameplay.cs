@@ -7,8 +7,8 @@ public abstract class AGameplay
     protected APlayer FirstPlayer;
     protected APlayer SecondPlayer;
     protected APlayer PlayersWin;
-    
-    protected GameEnum.GameplayType GameplayType;
+    protected APlayer PlayerTurn;
+    public GameEnum.GameplayType GameplayType {get; private set;}
     protected GameEnum.RoundResult _roundResult;
 
     
@@ -60,6 +60,8 @@ public abstract class AGameplay
 
     public virtual void StartRound()
     {
+        PlayerTurn = FirstPlayer;
+        
         OnRoundStartAction?.Invoke(GameplayType);
         
         Debug.Log($"RoundResult{_roundResult} RoundNum{_roundNum}");
@@ -88,8 +90,15 @@ public abstract class AGameplay
     
     public virtual void SelectItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem = GameEnum.GameItem.None)
     {
-        if (playersNumber == GameEnum.PlayersNumber.PlayerOne) FirstPlayer?.SelectItem(gameItem);
-        else SecondPlayer?.SelectItem(gameItem);
+        if (playersNumber == GameEnum.PlayersNumber.PlayerOne)
+        {
+            FirstPlayer?.SelectItem(gameItem);
+            PlayerTurn = SecondPlayer;
+        }
+        else
+        {
+            SecondPlayer?.SelectItem(gameItem);
+        }
 
         OnSelectedItemAction?.Invoke(playersNumber,gameItem);
 
@@ -129,6 +138,8 @@ public abstract class AGameplay
     {
         FirstPlayer.ResetData();
         SecondPlayer.ResetData();
+
+        PlayerTurn = FirstPlayer;
         
         OnNextRoundStepAction?.Invoke();
     }

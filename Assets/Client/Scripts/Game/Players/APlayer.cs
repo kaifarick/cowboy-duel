@@ -9,6 +9,7 @@ public abstract class APlayer
     public GameEnum.PlayersNumber PlayersNumber { get; protected set; }
     public int Health { get; private set; } = 1000;
     public SelectionItemsСharacteristic SelectionItemsСharacteristic { get; private set; }
+    public bool IsPlayerMadeNove => GameItem != GameEnum.GameItem.None;
 
     public APlayer()
     {

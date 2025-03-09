@@ -31,12 +31,28 @@ public class ChampionshipGameplay : AGameplay
         
     }
     
+    public override void SelectItem(GameEnum.PlayersNumber playersNumber, GameEnum.GameItem gameItem = GameEnum.GameItem.None)
+    {
+        StopMoveTimer();
+        base.SelectItem(playersNumber, gameItem);
+    }
+    
     private void EndRoundTime()
     {
         StopMoveTimer();
-        
-        if(FirstPlayer.GameItem == GameEnum.GameItem.None) SelectItem(GameEnum.PlayersNumber.PlayerOne);
-        if(SecondPlayer.GameItem == GameEnum.GameItem.None) SelectItem(GameEnum.PlayersNumber.PlayerTwo);
+
+        if (PlayerTurn == FirstPlayer)
+        {
+            SelectItem(GameEnum.PlayersNumber.PlayerOne);
+            StartMoveTimer(MOVE_TIME, EndRoundTime);
+            return;
+        }
+
+        if (PlayerTurn == SecondPlayer)
+        {
+            SelectItem(GameEnum.PlayersNumber.PlayerTwo);
+            return;
+        }
     }
     
     public override void NextRoundStep()

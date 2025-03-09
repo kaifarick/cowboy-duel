@@ -15,9 +15,7 @@ public class SelectionButtonsGroup : MonoBehaviour
 
     private Action<GameEnum.PlayersNumber, GameEnum.GameItem> _onSelectionButtonClickAction;
 
-    private bool _isGroupUseInRound;
-
-    [Inject] protected GamePresenter _gamePresenter;
+    [Inject] private GamePresenter _gamePresenter;
 
 
     public void Initialize(GameView gameView, Action<GameEnum.PlayersNumber,GameEnum.GameItem> onSelectionButtonClickAction)
@@ -33,13 +31,12 @@ public class SelectionButtonsGroup : MonoBehaviour
         gameView.OnGameEndAction += OnGameEnd;
         gameView.OnSelectionItemAction += OnSelectionItem;
         gameView.OnNextRoundStepAction += OnNextRoundStep;
-        
 
     }
 
     private void OnNextRoundStep()
     {
-        if (_isGroupUseInRound)
+        if (_playersNumber == GameEnum.PlayersNumber.PlayerOne)
         {
             gameObject.SetActive(true);
         }
@@ -52,13 +49,33 @@ public class SelectionButtonsGroup : MonoBehaviour
 
     private void OnSelectionItem(GameEnum.PlayersNumber playersNumber)
     {
-        if (_playersNumber == playersNumber) gameObject.SetActive(false);
+        var gamePlayType = _gamePresenter.GetGameplayType();
+        if (gamePlayType == GameEnum.GameplayType.OnePlayer)
+        {
+            if (_playersNumber == playersNumber)
+            {
+                gameObject.SetActive(false);
+            }
+        }
+        
+        else if (gamePlayType == GameEnum.GameplayType.TwoPlayers)
+        {
+            if (playersNumber == GameEnum.PlayersNumber.PlayerOne)
+            {
+                var state = _playersNumber == GameEnum.PlayersNumber.PlayerTwo;
+                gameObject.SetActive(state);
+            }
+            
+            if (playersNumber == GameEnum.PlayersNumber.PlayerTwo)
+            {
+                gameObject.SetActive(false);
+            }
+        }
     }
 
     private void OnRoundStart(GameEnum.GameplayType gameplayType)
     {
-        _isGroupUseInRound = _playersNumber == GameEnum.PlayersNumber.PlayerOne || gameplayType == GameEnum.GameplayType.TwoPlayers;
-        if (_isGroupUseInRound)
+        if (_playersNumber == GameEnum.PlayersNumber.PlayerOne)
         {
             gameObject.SetActive(true);
         }
